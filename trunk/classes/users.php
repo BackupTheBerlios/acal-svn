@@ -38,14 +38,14 @@ class Users {
 		
 		// If there are no groups than create a default group and user
 		$groups = $db->fetch_rows_array("SELECT * FROM groups", array('name', 'rights'));
+		$this->groups = $groups;
 		if (count($groups) == 0) {
+			// Make a default group
 			$rights = $db->escape_sql('admin,canedit');
-			$rows = array(
-				'table' => 'groups',
-				'admin',
-				$rights
-			);
-			$db->save_rows($rows, 'create');
+			$this->newGroup('admin', $rights);
+			
+			// Make a default admin user
+			$this->newUser('admin', 'admin', 'admin');
 		}
 		
 		// If login form has been submitted attempt to login
@@ -59,12 +59,25 @@ class Users {
 	
 	// Create group
 	function newGroup($name, $rights) {
-		
+		global $db;
+		$rows = array(
+			'table' => 'groups',
+			$name,
+			$rights
+		);
+		$db->save_rows($rows, 'create');
 	}
 	
 	// Create user
-	function newUser($name, $group, $password) {
-		
+	function newUser($name, $groups, $password) {
+		global $db;
+		$rows = array(
+			'table' => 'users',
+			$name,
+			$password,
+			$groups
+		);
+		$db->save_rows($rows, 'create');
 	}
 }
 ?>
