@@ -218,7 +218,7 @@ switch ($showPref) {
 }
 
 // End form
-echo '<p><input type="submit" value="' . Save . '"></p>';
+echo '<p><input type="submit" value="' . Save . '"> <input type="button" name="' . edit_requests('layer', NULL, REQUEST_URI, true) . '" onclick="window.location.href = this.name" value="Cancel" /></p>';
 echo '</form>';
 echo '</div></div>';
 ?>
