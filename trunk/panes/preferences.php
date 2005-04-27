@@ -157,6 +157,7 @@ switch ($showPref) {
 		}
 		echo '
 		</select>
+		<div style="margin-left: 100px;">
 		<p>New Group: <input type="text" size="20" name="newgroup" /></p>
 		<p>Delete Selected Groups: <input type="checkbox" name="delgroup" value="yes" /><br />
 		<span style="font-style: italic; color: grey;">Warning: Users in those groups will no longer be able to login.</span></p>
@@ -164,6 +165,7 @@ switch ($showPref) {
 		Can Manage Events 
 		
 		</p>
+		</div>
 		</fieldset>';
 		
 		break;
