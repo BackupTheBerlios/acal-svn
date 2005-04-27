@@ -1,0 +1,165 @@
+#!/usr/bin/env php
+<?php
+/*
+	ACal web based event calendar.
+    Copyright (C) 2005  Arthur Wiebe
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
+/*
+	This is a script designed to be run from the command line.
+	It's purpose is to help the configuration process of installing
+	this calendar. It's also a good tool for debugging.
+*/
+
+// Read input function
+function read() {
+    if (!defined('STDIN')) {
+        define('STDIN', fopen('php://stdin', 'r'));
+    }
+    return trim(fgets(STDIN));
+}
+
+// Check PHP Version
+if (!version_compare(phpversion(), "5.0.0", ">=")) {
+	exit("Error: ACal 3.0 Requires PHP 5.0.0 or later. You are using " . phpversion() . ". Please upgrade and try again.\n");
+}
+echo "Checking PHP Version. [" . phpversion() . "] Good\n";
+
+// Make sure SimpleXML is available.
+if (!function_exists('simplexml_load_file')) {
+	exit("Error: PHP was not compiled with SimpleXML support. Remove the --disable-simplexml option and build PHP again.\n");
+}
+echo "Checking for SimpleXML: Yes\n";
+
+// Check if we have read/write access to configuration.xml
+if (!is_writable('configuration.xml')) {
+	echo "configuration.xml is not writable by this script. You will have to edit it by hand.";
+}
+else {
+	echo "Checking if configuration.xml is writable. Yes\n";
+	
+	// Ask for preferred database
+	echo " What database would you like to use? sqlite or mysqli\n";
+	function askdb() {
+		echo "[sqlite] ";
+		$GLOBALS['database'] = read();
+	}
+	askdb();
+	while ($GLOBALS['database'] != 'sqlite' && $GLOBALS['database'] != 'mysqli' && $GLOBALS['database'] != '') {
+		echo "Error: " . $GLOBALS['database'] . " Does not exist. Please try again.\n";
+		askdb();
+	}
+	
+	if ($GLOBALS['database'] == '') {
+		$GLOBALS['database'] = 'sqlite';
+		echo "You Choose sqlite.\n";
+	}
+	else {
+		echo "You Choose " . $GLOBALS['database'] . ".\n";
+	}
+}
+
+// Make sure selected database is available
+switch ($GLOBALS['database']) {
+	case "sqlite":
+		if (!class_exists('SQLiteDatabase')) {
+			exit("Error: SQLite is not available.\n");
+		}
+		break;
+	case "mysqli":
+		if (!class_exists('mysqli')) {
+			exit("Error: MySQLi is not available.\n");
+		}
+		break;
+}
+echo "Checking for " . $GLOBALS['database'] . ". Good\n";
+
+// Set database configuration settings
+switch ($GLOBALS['database']) {
+	case "sqlite":
+		echo "\n\nWhere would you like the SQLite database to be stored? Note: The user your web server runs under must have write access to it.\nThe default value of UNDER_DOCUMENT_ROOT works fine with default Apache 2 from source installations.\n[UNDER_DOCUMENT_ROOT] ";
+		$GLOBALS['sqlite_path'] = read();
+		if ($GLOBALS['sqlite_path'] == '') {
+			$GLOBALS['sqlite_path'] = 'UNDER_DOCUMENT_ROOT';
+		}
+		if (!is_dir($GLOBALS['sqlite_path']) && $GLOBALS['sqlite_path'] != 'UNDER_DOCUMENT_ROOT') {
+			exit("Error: " . $GLOBALS['sqlite_path'] . " is not a valid path!\n");
+		}
+		echo $GLOBALS['sqlite_path'] . " is good.\n";
+		break;
+	case "mysqli":
+		echo "MySQL Host: [127.0.0.1] ";
+		$GLOBALS['mysqli_host'] = read();
+		if ($GLOBALS['mysqli_host'] == '') {
+			$GLOBALS['mysqli_host'] = '127.0.0.1';
+		}
+		
+		echo "MySQL Username: [root] ";
+		$GLOBALS['mysqli_user'] = read();
+		if ($GLOBALS['mysqli_user'] == '') {
+			$GLOBALS['mysqli_user'] = 'root';
+		}
+		
+		echo "MySQL Password: [] ";
+		$GLOBALS['mysqli_pass'] = read();
+		
+		echo "Checking database connection... ";
+		$db = new mysqli($GLOBALS['mysqli_host'], $GLOBALS['user'], $GLOBALS['pass']);
+		if (mysqli_connect_errno()) {
+			exit("Error: Could not connect to MySQL.\n");
+		}
+		echo "Good.\n";
+		break;
+}
+
+// Save configuration to configuration.xml file
+echo "Settings Configuration Options...";
+
+// Load XML file
+$xml = simplexml_load_file('configuration.xml');
+
+// Set database options
+switch ($GLOBALS['database']) {
+	case "sqlite":
+		$xml->db = $GLOBALS['database'];
+		$xml->sqlite_path = $GLOBALS['sqlite_path'];
+		
+		// Make sure sqlite_path has trailing slash
+		if (substr($xml->sqlite_path, strlen($xml->sqlite_path) - 1, 1) != '/') {
+			$xml->sqlite_path .= '/';
+			echo " +/ ";
+		}
+		break;
+	case "mysqli":
+		$xml->db = $GLOBALS['database'];
+		$xml->mysqli_host = $GLOBALS['mysqli_host'];
+		$xml->mysqli_username = $GLOBALS['mysqli_user'];
+		$xml->mysqli_password = $GLOBALS['mysqli_pass'];
+		break;		
+}
+echo " Done.\n";
+
+// Save new XML file
+echo "Saving new configuration...";
+if (!file_put_contents('configuration.xml', $xml->asXML())) {
+	exit("Error: Could not write to configuration.xml\n");
+}
+echo " Good\n";
+
+echo "\nConfiguration was a Success!\n";
+echo "	Database = " . $GLOBALS['database'] . "\n";
+?>

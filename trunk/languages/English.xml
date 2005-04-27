@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	ACal web based event calendar.
+    Copyright (C) 2005  Arthur Wiebe
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-->
+
+<!DOCTYPE dict [
+  <!ENTITY amp "ANDampSC">
+]>
+
+<dict>
+	<!-- Display Name -->
+	<display>English</display>
+	
+	<!-- String locale for PHP -->
+	<!-- http://ca.php.net/manual/en/function.setlocale.php -->
+	<!-- Seperate multiple locales with commas -->
+	<lang>en_EN</lang>
+
+	<!-- The strings to translate -->
+	<str name="ACal">ACal</str>
+	<str name="Calendar">Calendar</str>
+	<str name="Month">Month</str>
+	<str name="Year">Year</str>
+	<str name="View">View</str>
+	<str name="Language">Language:</str>
+	<str name="Go">Go</str>
+	<str name="Navigation">Navigation</str>
+	
+	<str name="January">January</str>
+	<str name="February">February</str>
+	<str name="March">March</str>
+	<str name="April">April</str>
+	<str name="May">May</str>
+	<str name="June">June</str>
+	<str name="July">July</str>
+	<str name="August">August</str>
+	<str name="September">September</str>
+	<str name="October">October</str>
+	<str name="November">November</str>
+	<str name="December">December</str>
+	
+	<str name="Sunday">Sunday</str>
+	<str name="Monday">Monday</str>
+	<str name="Tuesday">Tuesday</str>
+	<str name="Wednesday">Wednesday</str>
+	<str name="Thursday">Thursday</str>
+	<str name="Friday">Friday</str>
+	<str name="Saturday">Saturday</str>
+	
+	<str name="Preferences">Preferences</str>
+	<str name="General">General</str>
+	<str name="Alarm">Alarm</str>
+	<str name="Save">Save</str>
+	<str name="Localization">Localization</str>
+	<str name="Template">Template</str>
+	<str name="Users_and_Groups">Users &amp; Groups</str>
+	
+	<!-- Phrases -->
+	<str name="Event_has_been_saved">Event has been saved</str>
+	<str name="It_is_now">It is now:</str>
+	<str name="Date_and_Time">Date &amp; Time</str>
+	
+	<!-- Strings for development and debug only. -->
+	<str name="ACAL_DEBUG">true</str>
+</dict>

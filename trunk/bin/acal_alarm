@@ -1,0 +1,157 @@
+#!/usr/bin/env php
+<?php
+/*
+	ACal web based event calendar.
+    Copyright (C) 2005  Arthur Wiebe
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
+// Define help
+$help = 'Usage: acal_alarm -m <method> -t <timestamp> -n <name>
+	<method> Type of alarm. Can be email or html.
+	<timestamp> The PHP timestamp for when the alarm will be activated.
+	<name> Database ID where alarm information is stored.
+';
+
+$cfg = simplexml_load_file('configuration.xml');
+global $cfg;
+
+// Include Console_Getopt
+require_once('Console/Getopt.php');
+
+// Initialize Console_Getopt
+$cg = new Console_Getopt();
+
+// Define allowed options
+$shortoptions = 'm:t:n:';
+
+// read the command line
+$args = $cg->readPHPArgv();
+
+// get options
+$ret = $cg->getopt($args, $shortoptions);
+
+// check for errors and die with an error message if there was a problem
+if (PEAR::isError($ret)) {
+    exit($ret->getMessage() . "\n");
+}
+
+$opts = $ret[0];
+if (count($opts) > 0) {
+	foreach ($opts as $opt) {
+		switch ($opt[0]) {
+			case 'm':
+				// The method must be email or html
+				if ($opt[1] != 'email' && $opt[1] != 'html') {
+					exit("Error: Method must be email or html.\n");
+				}
+				else {
+					define('Method', $opt[1]);
+				}
+				break;
+			case 't':
+				define('Timestamp', $opt[1]);
+				break;
+			case 'n':
+				define('DBName', $opt[1]);
+				break;
+		}
+	}
+}
+else {
+	// Display help
+	echo $help;
+}
+
+class alarm {
+	private $db;
+
+	function __construct() {
+		// Make sure each needed option is defined
+		if (!defined('Method')) {
+			exit("Error: Method not defined.\n");
+		}
+		if (!defined('Timestamp')) {
+			exit("Error: Timestamp not defined.\n");
+		}
+		if (!defined('DBName')) {
+			exit("Error: Name not defined.\n");
+		}
+		
+		global $cfg;
+		
+		require_once('classes/db.php');
+		// Start database abstraction layer
+		$tables = array();
+		$this->db = new StartDB($cfg->db, $tables);
+		
+		// Open db connection
+		$this->db->open('acal3');
+		
+	}
+	
+	function start() {
+		// Do switch board thing
+		switch (Method) {
+			case 'email':
+				// Remove SQL record
+				$sql = "DELETE FROM alarms WHERE id = '" . DBName . "'";
+				$this->db->run($sql);
+				
+				// Send email
+				
+				exit("Email Sent!\n");
+				break;
+			case 'html':
+				// Update row with active status which will last 15 minutes
+				$sql = "UPDATE alarms SET status = 'active' WHERE id = '" . DBName . "'";
+				if ($this->db->run($sql)) {
+				    echo "Status Updated\n";
+				}
+				else {
+				    echo "Error: Status could not be updated\n";
+				}
+				// Keep running for 15 minutes before removing record
+				$timestamp = Timestamp + (60*15);
+				define('Timeout', $timestamp);
+				break;
+		}
+	}
+	
+	function timeout() {
+		// Remove SQL record
+		$sql = "DELETE FROM alarms WHERE id = '" . DBName . "'";
+		$this->db->run($sql);
+		exit("Posted and removed message!\n");
+	}
+}
+
+// Create alarm object
+$alarm = new alarm();
+
+// Do a loop until something needs to happen
+do {
+	if (defined('Timeout')) {
+		if (time() >= Timeout) {
+			$alarm->timeout();
+		}
+	}
+    elseif (time() >= Timestamp) {
+        $alarm->start();
+    }
+    sleep(1);
+} while(true);
+?>

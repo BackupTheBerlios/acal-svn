@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	ACal web based event calendar.
+    Copyright (C) 2005  Arthur Wiebe
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-->
+<config>
+	<db>sqlite</db> <!-- Look inside the db directory for available options. -->
+	<prefix/> <!-- Prefix database so it won't interfere with other installations. -->
+	<!-- Prefixing is currently not working. -->
+	
+	<!-- SQLite Options -->
+	<sqlite_path>UNDER_DOCUMENT_ROOT</sqlite_path> <!-- Path to writable directory for storing database. Default value of UNDER_DOCUMENT_ROOT keyword should work for default Apache/PHP installations. -->
+	<!-- Example: /home/arthur/sqlite_data/  !! Must have a trailing slash !! -->
+
+	<!-- MySQLi Options (For MySQL 4.1 and later) -->
+	<mysqli_username>root</mysqli_username> <!-- Username for accessing MySQL server. -->
+	<mysqli_password></mysqli_password> <!-- Password for accessing MySQL server. -->
+	<mysqli_host>localhost</mysqli_host> <!-- Host where MySQL is running. -->
+</config>
