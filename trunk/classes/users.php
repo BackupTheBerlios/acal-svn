@@ -25,12 +25,27 @@
 */
 class Users {
 	private $status = 'out'; // Whether or not we are logged in
+	public $groups = array(); // Available Groups
 	
 	function __construct() {
+		global $db;
+		
 		// First check whether or not the user is logged
 		session_start();
 		if (isset($_SESSION['status']) && $_SESSION['status'] == 'in') {
 			$this->status = 'in';
+		}
+		
+		// If there are no groups than create a default group and user
+		$groups = $db->fetch_rows_array("SELECT * FROM groups", array('name', 'rights'));
+		if (count($groups) == 0) {
+			$rights = $db->escape_sql('admin,canedit');
+			$rows = array(
+				'table' => 'groups',
+				'admin',
+				$rights
+			);
+			$db->save_rows($rows, 'create');
 		}
 		
 		// If login form has been submitted attempt to login
@@ -39,6 +54,16 @@ class Users {
 	
 	// Try to login
 	function login() {
+		
+	}
+	
+	// Create group
+	function newGroup($name, $rights) {
+		
+	}
+	
+	// Create user
+	function newUser($name, $group, $password) {
 		
 	}
 }

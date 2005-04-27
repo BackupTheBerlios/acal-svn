@@ -43,8 +43,7 @@ class Prefs {
 			array('enable_alarms', $defval),
 			array('showLangMenu', 'false'),
 			array('locale', 'English'),
-			array('timezone', 'UTC'),
-			array('validGroups', 'admin,default')
+			array('timezone', 'UTC')
 		);
 		
 		$this->availablePrefs = $prefs;

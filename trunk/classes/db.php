@@ -19,9 +19,9 @@
 */
 
 class StartDB {
-	private $type = 'sqlite'; // Can be sqlite or mysqli
+	private $type = 'sqlite'; // Database we use
 	private $layer = ''; // Abstraction layer object
-	private $dbHandle = '';
+	private $dbHandle = ''; // Connection handle
 	private $tables = array(); // Required tables for the db
 	
 	function __construct($type, $tables) {
@@ -64,8 +64,11 @@ class StartDB {
 		return $this->layer->escape_sql($str);
 	}
 	
-	// Create/update rows in table
-	function save_rows($rows, $action) {
+	/* Create/update rows in table
+	 * $rows = array('table' => 'tablename', 'name' => 'value')
+	 * $action = create,update,delete
+	*/
+	function save_rows($rows, $action = 'create') {
 		return $this->layer->save_rows($rows, $action);
 	}
 }

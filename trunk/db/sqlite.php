@@ -49,7 +49,7 @@ class DBLayer {
 		$link = $this->link->query($sql);
 		if (!$link) {
 			printf("SQLite Error: %s\n", $this->link->lastError());
-			echo "<pre>$sql</pre>";
+			exit("<pre id=\"sql_error\">$sql</pre>");
 		}
 		return $link;
 	}
@@ -115,7 +115,7 @@ class DBLayer {
 	}
 	
 	// Save rows in table
-	function save_rows($rows, $action) {
+	function save_rows($rows, $action = 'create') {
 		if ($action == 'create') {
 			$sql = "INSERT INTO ";
 			$sql .= $rows['table'];

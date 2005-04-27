@@ -123,7 +123,7 @@ class DBLayer {
 	}
 	
 	// Save rows in table
-	function save_rows($rows, $action) {
+	function save_rows($rows, $action = 'create') {
 		if ($action == 'create') {
 			$sql = "INSERT INTO ";
 			$sql .= $rows['table'];
