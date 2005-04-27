@@ -339,6 +339,7 @@ class Events {
 		$id = $_GET['event'];
 		
 		$rows = array(
+			'table' => 'events',
 			'sqlWhere' => array('id', $id)
 		);
 		$db->save_rows($rows, 'delete');

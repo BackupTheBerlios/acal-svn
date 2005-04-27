@@ -2,6 +2,7 @@
 // Preferences Layer
 global $pref;
 global $time;
+global $users;
 
 // Figure out what pref we should be showing
 if (!isset($_GET['pref'])) {
@@ -39,8 +40,9 @@ foreach ($availablePrefPanes as $prefLink => $prefPane) {
 echo '</ul></div>';
 
 // Start form
+$formAction = edit_requests('editgroup', NULL, $_SERVER['REQUEST_URI'], true);
 echo '<div class="shadow">
-<form method="post" action="' . $_SERVER['REQUEST_URI'] . '">';
+<form method="post" action="' . $formAction . '">';
 
 // Print out the correct preference pane
 switch ($showPref) {
@@ -148,25 +150,70 @@ switch ($showPref) {
 		echo '<h2>' . Users_and_Groups . ' ' . Preferences . '</h2>';
 		
 		// Groups manager
-		echo '<fieldset><legend>Groups Manager</legend>
-		<select multiple="true" name="groups" size="6" style="float: left">';
-		$groups = $pref->prefs['validGroups'];
-		$groups = explode(',', $groups);
-		foreach ($groups as $group) {
-			echo '<option name="' . $group . '">' . $group . '</option>';
+		echo '<fieldset><legend>Groups Manager</legend>';
+		if (defined('PREFS_MSG')) {
+			echo '<p class="message">' . PREFS_MSG . '</p>';
 		}
+		echo '
+		<select multiple="true" name="groups" size="6" style="float: left" onchange="jumpTo(this);">';
+		foreach ($users->groups as $group) {
+			$req = array(
+				'editgroup' => $group['name']
+			);
+			$uri = pend_requests($req);
+			echo '<option value="' . $uri . '"';
+			if (isset($_GET['editgroup']) && $_GET['editgroup'] == $group['name']) {
+				echo ' selected="selected"';
+			}
+			echo '>' . $group['name'] . '</option>';
+		}
+		
+		if (isset($_GET['editgroup'])) {
+			// Get that group information
+			foreach ($users->groups as $group) {
+				if ($group['name'] == $_GET['editgroup']) {
+					$groupInfo = $group['rights'];
+					$groupInfo = explode(',', $groupInfo);
+					break;
+				}
+			}
+		}
+		else {
+			$groupInfo = array();
+		}
+		
 		echo '
 		</select>
 		<div style="margin-left: 70px;">
 		<p>New Group: <input type="text" size="20" name="newgroup" /></p>
-		<p>Delete Selected Groups: <input type="checkbox" name="delgroup" value="yes" /><br />
+		<p>Delete Selected Group: <input type="checkbox" name="delgroup" value="yes" /><br />
 		<span style="font-style: italic; color: grey;">Warning: Users in those groups will no longer be able to login.</span></p>
-		<p><b>Group Settings:</b><br />
-		Can Manage Events <input type="checkbox" name="canedit" value="true" /><br />
-		Has Administration Rights <input type="checkbox" name="admin" value="true" />
+		<p><b>';
+		if (isset($_GET['editgroup'])) {
+			echo ucwords($_GET['editgroup']);
+		}
+		else {
+			echo 'New';
+		}
+		echo ' Group Settings:</b><br />
+		Can Manage Events <input type="checkbox" name="canedit" value="true"';
+		if (in_array('canedit', $groupInfo)) {
+			echo ' checked="true"';
+		}
+		echo ' /><br />
+		Has Administration Rights <input type="checkbox" name="admin" value="true"';
+		if (in_array('admin', $groupInfo)) {
+			echo ' checked="true"';
+		}
+		echo ' />
 		</p>
 		</div>
 		</fieldset>';
+		
+		if (isset($_GET['editgroup'])) {
+			echo '<input type="hidden" name="group" value="' . $_GET['editgroup'] . '" />';
+		}
+		echo '<input type="hidden" name="edit_groups" value="true" />';
 		break;
 }
 

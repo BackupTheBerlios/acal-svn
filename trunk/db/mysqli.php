@@ -159,7 +159,7 @@ class DBLayer {
 			$this->sql($sql);
 		}
 		elseif ($action == 'delete') {
-			$sql = 'DELETE FROM events WHERE ' . $rows['sqlWhere'][0] . ' = \'' . $rows['sqlWhere'][1] . "'";
+			$sql = 'DELETE FROM ' . $rows['table'] . ' WHERE ' . $rows['sqlWhere'][0] . ' = \'' . $rows['sqlWhere'][1] . "'";
 			$this->sql($sql);
 		}
 	}

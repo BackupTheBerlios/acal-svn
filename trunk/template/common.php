@@ -35,6 +35,14 @@ $html['commonhead'] = '	<link rel="stylesheet" type="text/css" href="css/main.ph
 	<script src="js/ie7/ie7-standard.js" type="text/javascript">
 	</script>
 	<![endif]-->
+	<script type="text/javascript">
+    <!--
+        function jumpTo(URL_List) {
+            var URL = URL_List.options[URL_List.selectedIndex].value;
+            window.location.href = URL;
+		}
+    -->
+    </script>
 ';
 
 $html['bodystart'] = '	</head>

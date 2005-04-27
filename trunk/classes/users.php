@@ -36,6 +36,38 @@ class Users {
 			$this->status = 'in';
 		}
 		
+		// If login form has been submitted attempt to login
+		if (isset($_POST['edit_groups']) && $_POST['edit_groups'] == 'true') {
+			// Should we create a new group?
+			if ($_POST['newgroup'] != '') {
+				// Put together rights
+				$rights = array();
+				if (isset($_POST['admin'])) {
+					$rights[] = 'admin';
+				}
+				if (isset($_POST['canedit'])) {
+					$rights[] = 'canedit';
+				}
+				
+				// Make sure group has at least some rights
+				if (count($rights) <= 0) {
+					define('PREFS_MSG', 'Error: Group has no rights.');
+				}
+				else {
+					// Format rights correctly
+					$rights = implode(',', $rights);
+					$this->newGroup($_POST['newgroup'], $rights);
+					define('PREFS_MSG', 'Group has been added.');
+				}
+			}
+			// Or should we delete the group?
+			elseif (isset($_POST['delgroup']) && $_POST['delgroup'] == 'yes') {
+				$this->rmGroup($_POST['group']);
+				define('PREFS_MSG', 'Group has been removed.');
+			}
+		}
+		
+		
 		// If there are no groups than create a default group and user
 		$groups = $db->fetch_rows_array("SELECT * FROM groups", array('name', 'rights'));
 		$this->groups = $groups;
@@ -47,14 +79,21 @@ class Users {
 			// Make a default admin user
 			$this->newUser('admin', 'admin', 'admin');
 		}
-		
-		// If login form has been submitted attempt to login
-		
 	}
 	
 	// Try to login
 	function login() {
 		
+	}
+	
+	// Delete a group
+	function rmGroup($name) {
+		global $db;
+		$rows = array(
+			'table' => 'groups',
+			'sqlWhere' => array('name', $name)
+		);
+		$db->save_rows($rows, 'delete');
 	}
 	
 	// Create group

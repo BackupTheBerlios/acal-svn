@@ -23,6 +23,11 @@ header('Content-Type: text/css; charset=utf-8');
 
 // Stylesheet Starts Here!
 echo '
+*.message {
+	font-style: italic;
+	color: #660000;
+}
+
 #Prefs {
 	clear: left;
 }
