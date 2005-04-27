@@ -162,8 +162,8 @@ switch ($showPref) {
 		<p>Delete Selected Groups: <input type="checkbox" name="delgroup" value="yes" /><br />
 		<span style="font-style: italic; color: grey;">Warning: Users in those groups will no longer be able to login.</span></p>
 		<p><b>Group Settings:</b><br />
-		Can Manage Events 
-		
+		Can Manage Events <input type="checkbox" name="canedit" value="true" /><br />
+		Has Administration Rights <input type="checkbox" name="admin" value="true" />
 		</p>
 		</div>
 		</fieldset>';
