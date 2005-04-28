@@ -23,6 +23,15 @@ header('Content-Type: text/css; charset=utf-8');
 
 // Stylesheet Starts Here!
 echo '
+*.pref_block {
+	padding: 6px;
+	border: 2px solid silver;
+}
+
+legend {
+	font-weight: bold;
+}
+
 *.message {
 	font-style: italic;
 	color: #660000;
@@ -85,8 +94,8 @@ div.closed {
 }
 
 div.open {
-	position: fixed;
-	top: 16%;
+	position: absolute;
+	top: 7%;
 	left: 10%;
 	z-index: 10;
 }

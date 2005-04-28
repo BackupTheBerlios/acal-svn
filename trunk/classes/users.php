@@ -26,6 +26,7 @@
 class Users {
 	private $status = 'out'; // Whether or not we are logged in
 	public $groups = array(); // Available Groups
+	public $users = array(); // Available users
 	
 	function __construct() {
 		global $db;
@@ -36,8 +37,8 @@ class Users {
 			$this->status = 'in';
 		}
 		
-		// If preferences form has been submitted change stuff
-		if (isset($_POST['edit_groups']) && $_POST['edit_groups'] == 'true') {
+		// If groups manager form has been submitted change stuff
+		if (isset($_POST['edit_stuff']) && $_POST['edit_stuff'] == 'true') {
 			// Should we create a new group?
 			if ($_POST['newgroup'] != '') {
 				// Put together rights
@@ -51,12 +52,10 @@ class Users {
 				// Format rights correctly
 				$rights = implode(',', $rights);
 				$this->newGroup($_POST['newgroup'], $rights);
-				define('PREFS_MSG', 'Group has been added.');
 			}
 			// Or should we delete the group?
 			elseif (isset($_POST['delgroup']) && $_POST['delgroup'] == 'yes') {
 				$this->rmGroup($_POST['group']);
-				define('PREFS_MSG', 'Group has been removed.');
 			}
 			// Or maybe we want to edit this group?
 			elseif (isset($_POST['group'])) {
@@ -73,14 +72,58 @@ class Users {
 			}
 		}
 		
+		// If groups manager form has been submitted change stuff
+		if (isset($_POST['edit_stuff']) && $_POST['edit_stuff'] == 'true') {
+			// Maybe we should add a user
+			if (isset($_POST['newusername'])) {
+				// Make sure a valid username and password were provided
+				$grep = "|^[a-zA-Z0-9\_\.\-]+$|";
+				if (!preg_match($grep, $_POST['newusername'])) {
+					define('ERROR_MSG', 'Not a valid username. Username can only contain letters, number, dashes, and underscores.');
+				}
+				elseif (!preg_match($grep, $_POST['newpassword'])) {
+					define('ERROR_MSG', 'Not a valid password. Passwords can only contain letters, number, dashes, and underscores.');
+				}
+				else {
+					// Make sure passwords match
+					if ($_POST['newpassword'] != $_POST['passconfirm']) {
+						define('ERROR_MSG', 'Password and password confirmation do not match.');
+					}
+					// Also make sure user is member of at least one group
+					elseif (!isset($_POST['membergroups'])) {
+						define('ERROR_MSG', 'Error: User is not a member of any group(s).');
+					}
+					else {
+						$groups = implode(',', $_POST['membergroups']);
+						$this->newUser($_POST['newusername'], $groups, $_POST['newpassword']);
+					}
+				}
+			}
+			// Or maybe we should delete a user
+			elseif (isset($_POST['deluser'])) {
+				
+			}
+			// Or maybe we should edit a user
+			elseif (isset($_POST['editusername'])) {
+				
+			}
+		}
 		
-		// If there are no groups than create a default group and user
+		// Define groups array
 		$groups = $db->fetch_rows_array("SELECT * FROM groups", array('name', 'rights'));
 		// "Fix" array
 		foreach ($groups as $group) {
 			$this->groups[$group['name']] = $group['rights'];
 		}
 		
+		// Define users array
+		$users = $db->fetch_rows_array("SELECT * FROM users", array('user', 'password', 'groups'));
+		// "Fix" array
+		foreach ($users as $user) {
+			$this->users[$user['user']] = array('password' => $user['password'], 'groups' => explode(',', $user['groups']));
+		}
+		
+		// If there are no groups than create a default group and user
 		if (count($groups) == 0) {
 			// Make a default group
 			$rights = $db->escape_sql('admin,canedit');

@@ -150,11 +150,7 @@ switch ($showPref) {
 		echo '<h2>' . Users_and_Groups . ' ' . Preferences . '</h2>';
 		
 		// Groups manager
-		echo '<fieldset><legend>Groups Manager</legend>';
-		if (defined('PREFS_MSG')) {
-			echo '<p class="message">' . PREFS_MSG . '</p>';
-		}
-		echo '
+		echo '<fieldset><legend>Groups Manager</legend>
 		<select multiple="true" name="groups" size="6" style="float: left" onchange="jumpTo(this);">';
 		foreach ($users->groups as $name => $group) {
 			$req = array(
@@ -208,7 +204,67 @@ switch ($showPref) {
 		if (isset($_GET['editgroup'])) {
 			echo '<input type="hidden" name="group" value="' . $_GET['editgroup'] . '" />';
 		}
-		echo '<input type="hidden" name="edit_groups" value="true" />';
+		
+		// Users Manager
+		echo '<fieldset><legend>User Manager</legend>';
+		if (defined('ERROR_MSG')) {
+			echo '<p class="message">' . ERROR_MSG . '</p>';
+		}
+		echo '<p>Edit User: <select name="edituser" onchange="jumpTo(this);">
+		<option value=" ' . edit_requests('edituser', NULL, REQUEST_URI, true) . '"> ---- </option>';
+		foreach ($users->users as $username => $user) {
+			$req = array(
+				'edituser' => $username
+			);
+			$uri = pend_requests($req);
+			echo '<option value="' . $uri . '"';
+			if (isset($_GET['edituser']) && $_GET['edituser'] == $username) {
+				echo ' selected="selected"';
+			}
+			echo '>' . $username . '</option>';
+		}
+		echo '</select></p>';
+		
+		// New user field
+		echo '<div class="pref_block">';
+		if (!isset($_GET['edituser'])) {
+			$pretext = 'New ';
+			$prefield = 'new';
+		}
+		else {
+			$pretext = '';
+			$prefield = 'edit';
+		}
+		echo '<p>' . $pretext . 'Username: <input type="text" name="' . $prefield . 'username" size="20"';
+		if (isset($_GET['edituser'])) {
+			echo ' value="' . $_GET['edituser'] . '"';
+		}
+		echo ' />';
+		if (isset($_GET['edituser'])) {
+			echo ' Delete User: <input type="checkbox" name="deluser" value="true" /></p>';
+		}
+		echo '<p>' . $pretext . 'Password: <input type="password" name="' . $prefield . 'password" size="20"';
+		if (isset($_GET['edituser'])) {
+			echo ' value="' . $users->users[$_GET['edituser']]['password'] . '"';
+		}
+		echo ' /> Confirm: <input type="password" name="passconfirm" size="20"';
+		if (isset($_GET['edituser'])) {
+			echo ' value="' . $users->users[$_GET['edituser']]['password'] . '"';
+		}
+		echo ' /></p>
+		<p><span style="float: left;">Member of the selected group(s): </span><select name="membergroups[]" multiple="true">';
+		foreach ($users->groups as $name => $group) {
+			echo '<option value="' . $name . '"';
+			if (isset($_GET['edituser']) && in_array($name, $users->users[$_GET['edituser']]['groups'])) {
+				echo ' selected="selected"';
+			}
+			echo '>' . $name . '</option>';
+		}
+		echo '</select>
+		</p>
+		</div>
+		</fieldset>
+		<input type="hidden" name="edit_stuff" value="true" />';
 		break;
 }
 
