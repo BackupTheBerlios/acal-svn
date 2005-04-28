@@ -105,7 +105,28 @@ class Users {
 			}
 			// Or maybe we should edit a user
 			elseif (isset($_POST['editusername'])) {
-				
+				// Make sure a valid username and password were provided
+				$grep = "|^[a-zA-Z0-9\_\.\-]+$|";
+				if (!preg_match($grep, $_POST['editusername'])) {
+					define('ERROR_MSG', 'Not a valid username. Username can only contain letters, number, dashes, and underscores.');
+				}
+				elseif (!preg_match($grep, $_POST['editpassword'])) {
+					define('ERROR_MSG', 'Not a valid password. Passwords can only contain letters, number, dashes, and underscores.');
+				}
+				else {
+					// Make sure passwords match
+					if ($_POST['editpassword'] != $_POST['passconfirm']) {
+						define('ERROR_MSG', 'Password and password confirmation do not match.');
+					}
+					// Also make sure user is member of at least one group
+					elseif (!isset($_POST['membergroups'])) {
+						define('ERROR_MSG', 'Error: User is not a member of any group(s).');
+					}
+					else {
+						$groups = implode(',', $_POST['membergroups']);
+						$this->editUser($_POST['editusername'], $groups, $_POST['editpassword']);
+					}
+				}
 			}
 		}
 		
@@ -192,6 +213,19 @@ class Users {
 			'sqlWhere' => array('user', $user)
 		);
 		$db->save_rows($rows, 'delete');
+	}
+	
+	// Edit user
+	function editUser($user, $groups, $password) {
+		global $db;
+		$rows = array(
+			'table' => 'users',
+			'sqlWhere' => array('user', $user),
+			'user' => $user,
+			'password' => $password,
+			'groups' => $groups
+		);
+		$db->save_rows($rows, 'update');
 	}
 }
 ?>
