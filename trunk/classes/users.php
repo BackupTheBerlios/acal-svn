@@ -48,22 +48,28 @@ class Users {
 				if (isset($_POST['canedit'])) {
 					$rights[] = 'canedit';
 				}
-				
-				// Make sure group has at least some rights
-				if (count($rights) <= 0) {
-					define('PREFS_MSG', 'Error: Group has no rights.');
-				}
-				else {
-					// Format rights correctly
-					$rights = implode(',', $rights);
-					$this->newGroup($_POST['newgroup'], $rights);
-					define('PREFS_MSG', 'Group has been added.');
-				}
+				// Format rights correctly
+				$rights = implode(',', $rights);
+				$this->newGroup($_POST['newgroup'], $rights);
+				define('PREFS_MSG', 'Group has been added.');
 			}
 			// Or should we delete the group?
 			elseif (isset($_POST['delgroup']) && $_POST['delgroup'] == 'yes') {
 				$this->rmGroup($_POST['group']);
 				define('PREFS_MSG', 'Group has been removed.');
+			}
+			// Or maybe we want to edit this group?
+			elseif (isset($_POST['group'])) {
+				// Put together rights
+				$rights = array();
+				if (isset($_POST['admin'])) {
+					$rights[] = 'admin';
+				}
+				if (isset($_POST['canedit'])) {
+					$rights[] = 'canedit';
+				}
+				$rights = implode(',', $rights);
+				$this->saveGroup($_POST['group'], $rights);
 			}
 		}
 		
@@ -109,6 +115,18 @@ class Users {
 			$rights
 		);
 		$db->save_rows($rows, 'create');
+	}
+	
+	// Save group (update)
+	function saveGroup($name, $rights) {
+		global $db;
+		$rows = array(
+			'table' => 'groups',
+			'sqlWhere' => array('name', $name),
+			'name' => $name,
+			'rights' => $rights
+		);
+		$db->save_rows($rows, 'update');
 	}
 	
 	// Create user
