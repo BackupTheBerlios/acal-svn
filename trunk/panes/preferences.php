@@ -41,6 +41,7 @@ echo '</ul></div>';
 
 // Start form
 $formAction = edit_requests('editgroup', NULL, $_SERVER['REQUEST_URI'], true);
+$formAction = edit_requests('edituser', NULL, $formAction, true);
 echo '<div class="shadow">
 <form method="post" action="' . $formAction . '">';
 

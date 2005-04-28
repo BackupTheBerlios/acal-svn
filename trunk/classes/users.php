@@ -101,7 +101,7 @@ class Users {
 			}
 			// Or maybe we should delete a user
 			elseif (isset($_POST['deluser'])) {
-				
+				$this->rmUser($_POST['editusername']);
 			}
 			// Or maybe we should edit a user
 			elseif (isset($_POST['editusername'])) {
@@ -182,6 +182,16 @@ class Users {
 			$groups
 		);
 		$db->save_rows($rows, 'create');
+	}
+	
+	// Delete a user
+	function rmUser($user) {
+		global $db;
+		$rows = array(
+			'table' => 'users',
+			'sqlWhere' => array('user', $user)
+		);
+		$db->save_rows($rows, 'delete');
 	}
 }
 ?>
