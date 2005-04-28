@@ -9,11 +9,11 @@ ACal - Web Calendar
  3) Go to it in your web browser. Example: http://localhost/calendar/
 
 
-## Installing on Remote FTP Server ##
+## Installing on a Remote FTP Server ##
 
  1) If you have command line access run the configure script.
 	If you do not, open configuration.xml in a plain text editor.
-	Change whatever you need to.
+	Change whatever you need to. See the Configuration section below.
  2) Upload the calendar folder to your web server using your FTP client.
  3) Go to it in your web browser. Example: http://my.host.tld/calendar/
 
@@ -21,22 +21,22 @@ ACal - Web Calendar
 
 <db/> What database the calendar should use. Currently sqlite and mysqli are supported.
 
-<sqlite_path/> If you are using SQLite which is default. This tells ACal where to store
+<sqlite_path/> If you are using SQLite which is default, this tells ACal where to store
 	the database files. The default value of UNDER_DOCUMENT_ROOT should work fine if
-	you compiled and installed Apache from source using default settings.
+	you compiled and installed Apache2 from source using the default settings.
 
-<mysqli_host/> The address of the server hosting MySQL. Usually 127.0.0.1 or localhost is fine.
+<mysqli_host/> The domain or IP address of the server hosting MySQL. Usually 127.0.0.1 or localhost is fine.
 
-<mysqli_username/> Username for accessing the MySQL server.
+<mysqli_username/> Username needed for accessing the MySQL server.
 
-<mysqli_password/> Password for accessing the MySQL server.
+<mysqli_password/> Password needed for accessing the MySQL server.
 
 ## Notes ##
 
 PHP 5.0.0 or later is required.
 If you want to use MySQL, you must be using MySQL 4.1 or later with mysqli enabled in PHP via the --with-mysqli configure flag.
 SQLite is enabled by default on all PHP 5 installations, but requires that you set the path to a folder writable
-by your web server or PHP.
+by your web server. For example the user nobody or in some cases www must have write access to the folder defined in sqlite_path.
 
 Arthur Wiebe <artooro@gmail.com>
 http://acalproj.sourceforge.net
