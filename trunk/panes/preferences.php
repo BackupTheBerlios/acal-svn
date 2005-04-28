@@ -156,27 +156,22 @@ switch ($showPref) {
 		}
 		echo '
 		<select multiple="true" name="groups" size="6" style="float: left" onchange="jumpTo(this);">';
-		foreach ($users->groups as $group) {
+		foreach ($users->groups as $name => $group) {
 			$req = array(
-				'editgroup' => $group['name']
+				'editgroup' => $name
 			);
 			$uri = pend_requests($req);
 			echo '<option value="' . $uri . '"';
-			if (isset($_GET['editgroup']) && $_GET['editgroup'] == $group['name']) {
+			if (isset($_GET['editgroup']) && $_GET['editgroup'] == $name) {
 				echo ' selected="selected"';
 			}
-			echo '>' . $group['name'] . '</option>';
+			echo '>' . $name . '</option>';
 		}
 		
 		if (isset($_GET['editgroup'])) {
 			// Get that group information
-			foreach ($users->groups as $group) {
-				if ($group['name'] == $_GET['editgroup']) {
-					$groupInfo = $group['rights'];
-					$groupInfo = explode(',', $groupInfo);
-					break;
-				}
-			}
+			$groupInfo = $users->groups[$_GET['editgroup']];
+			$groupInfo = explode(',', $groupInfo);
 		}
 		else {
 			$groupInfo = array();

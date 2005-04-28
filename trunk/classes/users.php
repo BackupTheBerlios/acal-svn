@@ -36,7 +36,7 @@ class Users {
 			$this->status = 'in';
 		}
 		
-		// If login form has been submitted attempt to login
+		// If preferences form has been submitted change stuff
 		if (isset($_POST['edit_groups']) && $_POST['edit_groups'] == 'true') {
 			// Should we create a new group?
 			if ($_POST['newgroup'] != '') {
@@ -70,7 +70,11 @@ class Users {
 		
 		// If there are no groups than create a default group and user
 		$groups = $db->fetch_rows_array("SELECT * FROM groups", array('name', 'rights'));
-		$this->groups = $groups;
+		// "Fix" array
+		foreach ($groups as $group) {
+			$this->groups[$group['name']] = $group['rights'];
+		}
+		
 		if (count($groups) == 0) {
 			// Make a default group
 			$rights = $db->escape_sql('admin,canedit');

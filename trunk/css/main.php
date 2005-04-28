@@ -38,7 +38,7 @@ echo '
 	background-image: url("../images/layer_bg.png");
 	padding: 0 7px;
 	margin-right: 15px;
-	width: 500px;
+	min-width: 560px;
 	position: relative;
 	margin-bottom: 15px;
 }
