@@ -28,7 +28,6 @@ echo '<div class="pref_tabs">
 <ul>';
 $closeLink = edit_requests('layer', false, REQUEST_URI, true);
 $closeLink = edit_requests('pref', false, $closeLink, true);
-//echo '<a href="' . $closeLink . '"><img src="images/close.png" alt="-"></a>';
 
 foreach ($availablePrefPanes as $prefLink => $prefPane) {
 	echo '<li';
@@ -44,6 +43,19 @@ $formAction = edit_requests('editgroup', NULL, $_SERVER['REQUEST_URI'], true);
 $formAction = edit_requests('edituser', NULL, $formAction, true);
 echo '<div class="shadow">
 <form method="post" action="' . $formAction . '">';
+
+// Do a permissions checks
+if (!$users->client_check('admin')) {
+	echo '<p class="message">Sorry but you do not have access to Preferences. Please login below.</p>';
+	echo '<form method="post" action="' . $_SERVER['REQUEST_URI'] . '">
+	<p>Username: <input type="text" name="username" size="20" /></p>
+	<p>Password: <input type="password" name="password" size="20" /></p>
+	<p><input type="submit" value="Login" /></p>
+	<input type="hidden" name="login" value="true" />
+	</form>
+	</form></div></div>';
+}
+else { // Continue but ignore this statement when it comes to indenting
 
 // Print out the correct preference pane
 switch ($showPref) {
@@ -83,10 +95,23 @@ switch ($showPref) {
 	case "general":
 		echo '<h2>' . General . ' ' . Preferences . '</h2>';
 		
-		echo '<p>Test 2: <input type="test" size="25" name="test2" value="' . $pref->getvalue('test2') . '" /></p>
+		$pLevels = array(
+			'none' => 'None',
+			'readonly' => 'Read Only',
+			'readwrite' => 'Read/Write'
+		);
+		echo '<p>Protection Level: <select name="protectionLevel">';
+		foreach ($pLevels as $key => $level) {
+			echo "<option value=\"$key\"";
+			if ($pref->prefs['protectionLevel'] == $key) {
+				echo ' selected="selected"';
+			}
+			echo ">$level</option>";
+		}
+		echo '</select></p>
 		';
 		
-		echo '<input type="hidden" name="pref_action" value="test2">';
+		echo '<input type="hidden" name="pref_action" value="protectionLevel">';
 		break;
 		
 	case "alarm":
@@ -273,4 +298,6 @@ switch ($showPref) {
 echo '<p><input type="submit" value="' . Save . '"> <input type="button" name="' . edit_requests('layer', NULL, REQUEST_URI, true) . '" onclick="window.location.href = this.name" value="Cancel" /></p>';
 echo '</form>';
 echo '</div></div>';
+
+}	// End protection
 ?>

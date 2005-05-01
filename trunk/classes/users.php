@@ -27,15 +27,14 @@ class Users {
 	private $status = 'out'; // Whether or not we are logged in
 	public $groups = array(); // Available Groups
 	public $users = array(); // Available users
+	private $user = NULL;
 	
 	function __construct() {
 		global $db;
+		global $pref;
 		
-		// First check whether or not the user is logged
+		// Start session
 		session_start();
-		if (isset($_SESSION['status']) && $_SESSION['status'] == 'in') {
-			$this->status = 'in';
-		}
 		
 		// If groups manager form has been submitted change stuff
 		if (isset($_POST['edit_stuff']) && $_POST['edit_stuff'] == 'true') {
@@ -153,11 +152,76 @@ class Users {
 			// Make a default admin user
 			$this->newUser('admin', 'admin', 'admin');
 		}
+		
+		if (isset($_POST['login'])) {
+			$this->login();
+		}
+		
+		// Check whether or not the user is logged
+		if (isset($_SESSION['status']) && $_SESSION['status'] == 'in') {
+			$this->status = 'in';
+		}
 	}
 	
 	// Try to login
 	function login() {
-		
+		// Validate input
+		if (isset($this->users[$_POST['username']])) {
+			if ($this->users[$_POST['username']]['password'] == $_POST['password']) {
+				// Login
+				$_SESSION['status'] = 'in';
+				$_SESSION['username'] = $_POST['username'];
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/* Determine if client has rights
+	 * $requirement = [read],[editor],[admin]
+	*/
+	function client_check($requirement = 'read') {
+		global $pref;
+		// Take care of all cases when nobody is logged in
+		if ($this->status == 'out') {
+			switch ($pref->prefs['protectionLevel']) {
+				case 'none':
+					return false;
+					break;
+				case 'readonly':
+					if ($requirement == 'editor' || $requirement == 'admin') {
+						return false;
+					}
+					break;
+				case 'readwrite':
+					if ($requirement == 'admin') {
+						return false;
+					}
+					break;
+			}
+			return true;
+		}
+		// Take care of cases when somebody is logged in
+		else {
+			// First checkout who we are dealing with
+			$username = $_SESSION['username'];
+			switch ($requirement) {
+				case 'read':
+					return true;
+					break;
+				case 'editor':
+					if (in_array('canedit', $this->users[$username]['groups'])) {
+						return true;
+					}
+					break;
+				case 'admin':
+					if (in_array('admin', $this->users[$username]['groups'])) {
+						return true;
+					}
+					break;
+			}
+			return false;
+		}
 	}
 	
 	// Delete a group
