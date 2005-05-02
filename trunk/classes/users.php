@@ -24,7 +24,7 @@
  * to the calendar using a users and groups method.
 */
 class Users {
-	private $status = 'out'; // Whether or not we are logged in
+	public $status = 'out'; // Whether or not we are logged in
 	public $groups = array(); // Available Groups
 	public $users = array(); // Available users
 	private $user = NULL;
@@ -153,6 +153,11 @@ class Users {
 			$this->newUser('admin', 'admin', 'admin');
 		}
 		
+		if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
+			$this->logout();
+			$_SERVER['REQUEST_URI'] = edit_requests('logout', NULL, $_SERVER['REQUEST_URI'], true);
+		}
+		
 		if (isset($_POST['login'])) {
 			$this->login();
 		}
@@ -175,6 +180,12 @@ class Users {
 			}
 		}
 		return false;
+	}
+	
+	// Logout
+	function logout() {
+		$this->status = 'out';
+		session_unset();
 	}
 	
 	/* Determine if client has rights

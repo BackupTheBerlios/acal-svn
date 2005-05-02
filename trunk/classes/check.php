@@ -39,7 +39,6 @@ class checkReq {
 				$_SERVER['REQUEST_URI'][$gkey] = $get;
 			}
 		}
-		define('REQUEST_URI', $_SERVER['REQUEST_URI']);
 	}
 }
 ?>

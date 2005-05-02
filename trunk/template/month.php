@@ -27,6 +27,7 @@ $events = new Events();
 $cset = cset();
 
 global $time;
+global $users;
 
 // The title and other head information
 $html['head'] = '<title>' . Calendar . ': ' . constant($time->date('F', $time->timestamp)) . ' ' . $time->date('Y', $time->timestamp) . '</title>';
@@ -47,6 +48,12 @@ if ($alarms = active_alarms()) {
 echo '<div class="topbar">';
 // Toggle view buttons
 echo '<div class="vtoggle">';
+
+// Maybe display logout link here
+if ($users->status == 'in') {
+	echo '<a href="' . pend_requests(array('logout' => 'true')) . '">Logout</a>';
+}
+
 echo '<a href="&amp;view=day"><img src="images/day_view_btn.png" alt="Day View" /></a>';
 echo '<a href="&amp;view=week"><img src="images/week_view_btn.png" alt="Week View" /></a>';
 echo '<a href="&amp;view=month"><img src="images/month_view_btn.png" alt="Month View" /></a>';

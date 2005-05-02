@@ -23,6 +23,16 @@ header('Content-Type: text/css; charset=utf-8');
 
 // Stylesheet Starts Here!
 echo '
+a {
+	color: blue;
+	text-decoration: underline;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #071F9E;
+}
+
 *.pref_block {
 	padding: 6px;
 	border: 2px solid silver;

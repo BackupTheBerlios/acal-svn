@@ -26,7 +26,7 @@ echo '<div id="Prefs" class="open">';
 // The tabs
 echo '<div class="pref_tabs">
 <ul>';
-$closeLink = edit_requests('layer', false, REQUEST_URI, true);
+$closeLink = edit_requests('layer', false, $_SERVER['REQUEST_URI'], true);
 $closeLink = edit_requests('pref', false, $closeLink, true);
 
 foreach ($availablePrefPanes as $prefLink => $prefPane) {
@@ -295,7 +295,7 @@ switch ($showPref) {
 }
 
 // End form
-echo '<p><input type="submit" value="' . Save . '"> <input type="button" name="' . edit_requests('layer', NULL, REQUEST_URI, true) . '" onclick="window.location.href = this.name" value="Cancel" /></p>';
+echo '<p><input type="submit" value="' . Save . '"> <input type="button" name="' . edit_requests('layer', NULL, $_SERVER['REQUEST_URI'], true) . '" onclick="window.location.href = this.name" value="Cancel" /></p>';
 echo '</form>';
 echo '</div></div>';
 
