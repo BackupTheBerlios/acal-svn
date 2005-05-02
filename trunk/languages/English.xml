@@ -40,6 +40,8 @@
 	<str name="Language">Language:</str>
 	<str name="Go">Go</str>
 	<str name="Navigation">Navigation</str>
+	<str name="Login">Login</str>
+	<str name="Logout">Logout</str>
 	
 	<str name="January">January</str>
 	<str name="February">February</str>

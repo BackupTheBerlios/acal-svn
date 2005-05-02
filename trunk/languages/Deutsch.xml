@@ -42,6 +42,8 @@
 	<str name="Language">Sprache:</str>
 	<str name="Go">Gehen Sie</str>
 	<str name="Navigation">Diagramm</str>
+	<str name="Login">LOGON</str>
+	<str name="Logout">Urlaub</str>
 	
 	<str name="January">Januar</str>
 	<str name="February">Februar</str>

@@ -50,7 +50,8 @@ if (!$users->client_check('admin')) {
 	echo '<form method="post" action="' . $_SERVER['REQUEST_URI'] . '">
 	<p>Username: <input type="text" name="username" size="20" /></p>
 	<p>Password: <input type="password" name="password" size="20" /></p>
-	<p><input type="submit" value="Login" /></p>
+	<p><input type="submit" value="Login" />
+	<input type="button" name="' . edit_requests('layer', NULL, $_SERVER['REQUEST_URI'], true) . '" onclick="window.location.href = this.name" value="Cancel" /></p>
 	<input type="hidden" name="login" value="true" />
 	</form>
 	</form></div></div>';

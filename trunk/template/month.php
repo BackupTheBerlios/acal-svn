@@ -51,7 +51,10 @@ echo '<div class="vtoggle">';
 
 // Maybe display logout link here
 if ($users->status == 'in') {
-	echo '<a href="' . pend_requests(array('logout' => 'true')) . '">Logout</a>';
+	echo '<a href="' . pend_requests(array('logout' => 'true')) . '">' . Logout . '</a>';
+}
+else {
+	echo '<a href="'. pend_requests(array('layer' => 'preferences')) . '">' . Login . '</a>';
 }
 
 echo '<a href="&amp;view=day"><img src="images/day_view_btn.png" alt="Day View" /></a>';
@@ -699,14 +702,17 @@ echo '</select>';
 // GO
 echo ' <input type="submit" value="' . Go . '">';
 
-echo '<div class="txt_btn"><a href="';
-if (!isset($_GET['layer'])) {
-	echo pend_requests(array('layer' => 'preferences'));
+// Display Preferences button if logged in
+if ($users->status == 'in') {
+	echo '<div class="txt_btn"><a href="';
+	if (!isset($_GET['layer'])) {
+		echo pend_requests(array('layer' => 'preferences'));
+	}
+	else {
+		echo 'javascript:openLayer(\'Prefs\');';
+	}
+	echo '">' . Preferences . '</a></div>';
 }
-else {
-	echo 'javascript:openLayer(\'Prefs\');';
-}
-echo '">' . Preferences . '</a></div>';
 
 // End navigation panel
 echo '</fieldset>';
