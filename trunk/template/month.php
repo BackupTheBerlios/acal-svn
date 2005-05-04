@@ -37,6 +37,20 @@ ob_start();
 
 global $pref;
 
+// Make sure client has read access
+if (!$users->client_check('read')) {
+	echo '<div class="shadow" style="width: 400px; margin-right: auto; margin-left: auto; padding: 15px;"><p class="message">Sorry but you do not have access to this calendar. Please login below.</p>';
+	echo '<form method="post" action="' . $_SERVER['REQUEST_URI'] . '">
+	<p>Username: <input type="text" name="username" size="20" /></p>
+	<p>Password: <input type="password" name="password" size="20" /></p>
+	<p><input type="submit" value="Login" /></p>
+	<input type="hidden" name="login" value="true" />
+	</form></div>';
+	$html['c'][0] = ob_get_contents();
+	ob_end_clean();
+}
+else {
+
 // Display any activated alarms
 if ($alarms = active_alarms()) {
 	foreach ($alarms as $alarm) {
@@ -94,6 +108,7 @@ else {
 
 // If $sidebar is true, show it the correct one
 if ($sidebar && isset($_GET['rmevent']) && $_GET['rmevent'] == 'true') {
+	if ($users->client_check('editor')) {
 	$sidebar = false;
 	
 	// Ask if this event should really be removed
@@ -112,8 +127,24 @@ if ($sidebar && isset($_GET['rmevent']) && $_GET['rmevent'] == 'true') {
 	</div>
 	</div>
 	';
+	}// End protection layer
 }
 if ($sidebar) {
+	echo '<div class="side_panel">';
+	echo '<span class="iconsl"><a href="' . str_replace('&', '&amp;', edit_requests('sidebar', 'false')) . '" title="Close"><img src="images/close.png" alt="-"></a></span>';
+	
+	if (!$users->client_check('editor')) {
+		echo '<p class="message">Sorry but you cannot manage events. Please login below.</p>';
+		echo '<form method="post" action="' . $_SERVER['REQUEST_URI'] . '">
+		<p>Username: <input type="text" name="username" size="20" /></p>
+		<p>Password: <input type="password" name="password" size="20" /></p>
+		<p><input type="submit" value="Login" /></p>
+		<input type="hidden" name="login" value="true" />
+		</form>
+		</div>';
+	}
+	else {
+	
 	// Shall we load an event instead of create a new one?
 	if (isset($_GET['event'])) {
 		$event = $events->loadEvent();
@@ -121,10 +152,6 @@ if ($sidebar) {
 	else {
 		$event = false;
 	}
-	
-	echo '<div class="side_panel">';
-	
-	echo '<span class="iconsl"><a href="' . str_replace('&', '&amp;', edit_requests('sidebar', 'false')) . '" title="Close"><img src="images/close.png" alt="-"></a></span>';
 	
 	// If there is a message available display it
 	echo '<span style="font-weight: bold; color: red;">' . $events->message . '</span><br>';
@@ -492,6 +519,7 @@ if ($sidebar) {
 	echo '</form>';
 	// End the sidebar
 	echo '</div>';
+	}// End protection layer
 }
 
 // Start title and back/next buttons
@@ -727,4 +755,6 @@ if (isset($_GET['layer'])) {
 // Save buffer to template variable and end buffer
 $html['c'][0] = ob_get_contents();
 ob_end_clean();
+
+}// End protection layer
 ?>

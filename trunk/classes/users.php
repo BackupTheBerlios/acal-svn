@@ -133,7 +133,7 @@ class Users {
 		$groups = $db->fetch_rows_array("SELECT * FROM groups", array('name', 'rights'));
 		// "Fix" array
 		foreach ($groups as $group) {
-			$this->groups[$group['name']] = $group['rights'];
+			$this->groups[$group['name']] = explode(',', $group['rights']);
 		}
 		
 		// Define users array
@@ -216,17 +216,24 @@ class Users {
 		else {
 			// First checkout who we are dealing with
 			$username = $_SESSION['username'];
+			$urights = array();
+			foreach ($this->users[$username]['groups'] as $ugroup) {
+				$rights = $this->groups[$ugroup];
+				foreach ($rights as $right) {
+					$urights[] = $right;
+				}
+			}
 			switch ($requirement) {
 				case 'read':
 					return true;
 					break;
 				case 'editor':
-					if (in_array('canedit', $this->users[$username]['groups'])) {
+					if (in_array('canedit', $urights)) {
 						return true;
 					}
 					break;
 				case 'admin':
-					if (in_array('admin', $this->users[$username]['groups'])) {
+					if (in_array('admin', $urights)) {
 						return true;
 					}
 					break;

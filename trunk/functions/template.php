@@ -55,7 +55,10 @@ function pend_requests($args, $html = true) {
 }
 
 // Edit arguments from HTTP request
-function edit_requests($name, $value, $uri = REQUEST_URI, $remove = false) {
+function edit_requests($name, $value, $uri = NULL, $remove = false) {
+	if ($uri == NULL) {
+		$uri = $_SERVER['REQUEST_URI'];
+	}
 	if (!$remove) {
 		// Change the value of GET query
 		$req = str_replace("$name=$_GET[$name]", "$name=$value", $uri);

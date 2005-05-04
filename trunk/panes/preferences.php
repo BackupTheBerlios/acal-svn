@@ -54,7 +54,7 @@ if (!$users->client_check('admin')) {
 	<input type="button" name="' . edit_requests('layer', NULL, $_SERVER['REQUEST_URI'], true) . '" onclick="window.location.href = this.name" value="Cancel" /></p>
 	<input type="hidden" name="login" value="true" />
 	</form>
-	</form></div></div>';
+	</div></div>';
 }
 else { // Continue but ignore this statement when it comes to indenting
 
