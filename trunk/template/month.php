@@ -299,10 +299,10 @@ if ($sidebar) {
 			echo '</select>';
 			echo '<select name="meridiem" id="meridiem">';
 			if ($event) {
-				$xm == $event['xm'];
+				$xm = $event['xm'];
 			}
 			else {
-				$xm == $cset['xm'];
+				$xm = $cset['xm'];
 			}
 			echo '<option value="am"';
 			if ($xm == 'am') {
@@ -358,10 +358,10 @@ if ($sidebar) {
 			echo '</select>';
 			echo '<select name="tmeridiem" id="tmeridiem">';
 			if ($event) {
-				$xm == $event['txm'];
+				$xm = $event['txm'];
 			}
 			else {
-				$xm == $cset['txm'];
+				$xm = $cset['txm'];
 			}
 			echo '<option value="am"';
 			if ($xm == 'am') {
@@ -554,7 +554,7 @@ else {
 	$nmonth = "01";
 }
 echo '<div class="tnext"><a href="' . $_SERVER['SCRIPT_NAME'] . '?view=month&amp;year=' . $nyear . '&amp;month=' . $nmonth . '"><img src="images/l_next.png" alt="Next" /></a></div>';
-echo '<div class="theader">' . constant(date('F', $cset['timestamp'])) . date(', Y', $cset['timestamp']) . '</div>';
+echo '<div class="theader">' . constant($time->date('F', $cset['timestamp'])) . $time->date(', Y', $cset['timestamp']) . '</div>';
 echo '</div>';
 
 
@@ -574,7 +574,7 @@ echo '<td class="weekday">' . Saturday . '</td>
 </tr><tr>';
 
 // Days
-$firstday = date('w', mktime(0, 0, 0, $cset['month'], 1, $cset['year']));
+$firstday = $time->date('w', $time->make(0, 0, 0, 1, $cset['month'], $cset['year']));
 if ($firstday > 0) {
 	$i = 0;
 	while ($i < $firstday) {
@@ -594,7 +594,7 @@ while ($i <= $cset['days']) {
 		'month' => $cset['month'],
 		'day' => sprintf('%02d', $i),
 	);
-	if (date('d') == $requests['day'] && date('Y') == $requests['year'] && date('m') == $requests['month']) {
+	if ($time->date('d') == $requests['day'] && $time->date('Y') == $requests['year'] && $time->date('m') == $requests['month']) {
 		echo ' id="today"';
 	}
 	
@@ -609,8 +609,8 @@ while ($i <= $cset['days']) {
 	echo '<span class="icons"><a href="' . preg_replace("|(\&event\=)(\d*)|", '', pend_requests($requests)) . '" title="Open Sidebar"><img src="images/edit-trans.png" alt="+"></a></span>' . $i;
 	
 	// Take care of events
-	$timestamp1 = mktime(0, 0, 0, $requests['month'], $requests['day'], $requests['year']);
-	$timestamp2 = mktime(23, 59, 59, $requests['month'], $requests['day'], $requests['year']);
+	$timestamp1 = $time->make(0, 0, 0, $requests['day'], $requests['month'], $requests['year']);
+	$timestamp2 = $time->make(23, 59, 59, $requests['day'], $requests['month'], $requests['year']);
 	$events = get_events($timestamp1, $timestamp2);
 	foreach ($events as $event) {
 		echo '<div class="event"';
@@ -642,7 +642,7 @@ while ($i <= $cset['days']) {
 	$i++;
 }
 
-$lastday = date('w', mktime(0, 0, 0, $cset['month'], $cset['days'], $cset['year']));
+$lastday = $time->date('w', $time->make(0, 0, 0, $cset['days'], $cset['month'], $cset['year']));
 $i = 0;
 if ($lastday != 6) {
 	$daysleft = 6 - $lastday;
@@ -667,35 +667,35 @@ echo '<fieldset><legend>' . Navigation . '</legend>';
 // Choose Year
 echo '<label>' . Year . ': </label><select name="year">';
 echo '<option value="2005"';
-if (date('Y') == 2005) {
+if ($time->date('Y') == 2005) {
 	echo ' selected="selected"';
 }	echo '>2005</option>';
 echo '<option value="2006"';
-if (date('Y') == 2006) {
+if ($time->date('Y') == 2006) {
 	echo ' selected="selected"';
 }	echo '>2006</option>';
 echo '<option value="2007"';
-if (date('Y') == 2007) {
+if ($time->date('Y') == 2007) {
 	echo ' selected="selected"';
 }	echo '>2007</option>';
 echo '<option value="2008"';
-if (date('Y') == 2008) {
+if ($time->date('Y') == 2008) {
 	echo ' selected="selected"';
 }	echo '>2008</option>';
 echo '<option value="2009"';
-if (date('Y') == 2009) {
+if ($time->date('Y') == 2009) {
 	echo ' selected="selected"';
 }	echo '>2009</option>';
 echo '<option value="2010"';
-if (date('Y') == 2010) {
+if ($time->date('Y') == 2010) {
 	echo ' selected="selected"';
 }	echo '>2010</option>';
 echo '<option value="2011"';
-if (date('Y') == 2011) {
+if ($time->date('Y') == 2011) {
 	echo ' selected="selected"';
 }	echo '>2011</option>';
 echo '<option value="2012"';
-if (date('Y') == 2012) {
+if ($time->date('Y') == 2012) {
 	echo ' selected="selected"';
 }	echo '>2012</option>';
 echo '</select>';
@@ -719,7 +719,7 @@ $months = array(
 $i = 01;
 foreach ($months as $month) {
 	echo '<option value="' . sprintf("%02d", $i) . '"';
-	if (sprintf("%02d", $i) == date('m')) {
+	if (sprintf("%02d", $i) == $time->date('m')) {
 		echo ' selected="selected"';
 	}
 	echo '>' . $month . '</option>';

@@ -107,6 +107,7 @@ function popup($url) {
 
 // Put all the date variables into an array (Set C)
 function cset() {
+	global $time;
 	$arr = array();
 	
 	// Year
@@ -117,7 +118,7 @@ function cset() {
 		$arr['year'] = $_POST['year'];
 	}
 	else {
-		$arr['year'] = date('Y');
+		$arr['year'] = $time->date('Y');
 	}
 	
 	// Month
@@ -128,7 +129,7 @@ function cset() {
 		$arr['month'] = $_POST['month'];
 	}
 	else {
-		$arr['month'] = date('m');
+		$arr['month'] = $time->date('m');
 	}
 	
 	// Day
@@ -139,42 +140,44 @@ function cset() {
 		$arr['day'] = $_POST['day'];
 	}
 	else {
-		$arr['day'] = date('d');
+		$arr['day'] = $time->date('d');
 	}
 	
 	// Amount of days in month
-	$arr['days'] = date('t', mktime(0, 0, 0, $arr['month'], $arr['day'], $arr['year']));
+	$arr['days'] = $time->date('t', $time->make(0, 0, 0, $arr['day'], $arr['month'], $arr['year']));
 	
 	// Timestamp
-	$arr['timestamp'] = mktime(0, 0, 0, $arr['month'], $arr['day'], $arr['year']);
+	$arr['timestamp'] = $time->make(0, 0, 0, $arr['day'], $arr['month'], $arr['year']);
 	
 	global $pref;
 	// Next hour
 	if ($pref->getvalue('ttype') == 'world') {
-		$hr = date('H');
-		$arr['hour'] = $hr;
-		if ($hr == 23) {
-			$arr['nexthr'] = 00;
+		if ($time->now['hour'] < 23) {
+			$arr['nexthr'] = sprintf('%02d', $time->now['hour'] + 1);
 		}
 		else {
-			$hr++;
-			$arr['nexthr'] = sprintf('%02d', $hr);
+			$arr['nexthr'] = '00';
 		}
+		$arr['hour'] = $time->now['hour'];
 	}
 	else {
-		$hr = date('h');
-		$arr['hour'] = $hr;
-		if ($hr == 12) {
-			$arr['nexthr'] = 01;
+		$arr['xm'] = $time->date('a');
+		if ($time->now['hour'] > 12) {
+			$arr['hour'] = sprintf('%02d', $time->now['hour'] - 12);
+		}
+		if ($arr['hour'] == 12) {
+			$arr['thour'] = '01';
+			if ($arr['xm'] == 'am') {
+				$arr['txm'] = 'pm';
+			}
+			else {
+				$arr['txm'] = 'am';
+			}
 		}
 		else {
-			$hr++;
-			$arr['nexthr'] = sprintf('%02d', $hr);
+			$arr['txm'] = $arr['xm'];
+			$arr['thour'] = sprintf('%02d', $arr['hour'] + 1);
 		}
-		
-		// AM or PM
-		$arr['xm'] = date('a', $arr['timestamp']);
-		$arr['txm'] = date('a', mktime($arr['nexthr'], 0, 0, $arr['month'], $arr['day'], $arr['year']));
 	}
 	
 	// Return value
