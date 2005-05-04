@@ -29,7 +29,7 @@ $help = 'Usage: acal_alarm -m <method> -t <timestamp> -n <name>
 $cfg = simplexml_load_file('configuration.xml');
 global $cfg;
 
-// Include Console_Getopt
+// Include Console_Getopt which is installed by default along with PEAR
 require_once('Console/Getopt.php');
 
 // Initialize Console_Getopt
