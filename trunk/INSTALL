@@ -31,6 +31,14 @@ ACal - Web Calendar
 
 <mysqli_password/> Password needed for accessing the MySQL server.
 
+## Upgrading from ACal 3.0 Alpha 1 ##
+
+It is highly recommended that you completely remove the acal3 SQLite or MySQL database before upgrading to Alpha 2.
+The reason for this is the tables have been modified and are not compatible. You will likely get errors if you don't.
+
+It should also be noted that Firefox (Gecko) and Safari (WebCore) are the only browsers that can currently render the
+web pages correctly. We will work on this for the beta.
+
 ## Notes ##
 
 PHP 5.0.0 or later is required.
