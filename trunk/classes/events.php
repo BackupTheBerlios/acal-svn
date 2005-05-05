@@ -53,8 +53,9 @@ class Events {
 	If the user wants it removed, delete it.
 	*/
 	function save() {
-		// Make db global
+		// Make db and time global
 		global $db;
+		global $time;
 		
 		// Create alarm if needed
 		if ($_POST['alarm'] != 'none') {
@@ -65,7 +66,7 @@ class Events {
 			$msg = $db->escape_sql($_POST['message']); //Alarm message
 			
 			// Create timestamp for when the alarm will be activated
-			$timestamp = mktime($_POST['hour'], $_POST['minute'], 0, $_POST['month'], $_POST['day'], $_POST['year']);
+			$timestamp = $time->make(0, $_POST['minute'], $_POST['hour'], $_POST['day'], $_POST['month'], $_POST['year']);
 			
 			// Insert Alarm into DB
 			$sql = "INSERT INTO alarms VALUES('$alarmID', '$msg', '$type', '$timestamp')";
@@ -77,22 +78,13 @@ class Events {
 		
 		// Check if event is all day
 		if (isset($_POST['all-day'])) {
-			$time1 = mktime(0, 0, 0, $_POST['month'], $_POST['day'], $_POST['year']);
-			$time2 = mktime(23, 59, 59, $_POST['month'], $_POST['day'], $_POST['year']);
+			$time1 = $time->make(0, 0, 0, $_POST['day'], $_POST['month'], $_POST['year']);
+			$time2 = $time->make(59, 59, 23, $_POST['day'], $_POST['month'], $_POST['year']);
 		}
 		else {
-			// Check for DST
-			global $pref;
-			if ($pref->prefs['ttype'] == 'daylight') {
-				$dst = 1;
-			}
-			else {
-				$dst = -1;
-			}
-			
 			// Create the timestamps for this event
-			$time1 = mktime($_POST['hour'], $_POST['minute'], 0, $_POST['month'], $_POST['day'], $_POST['year'], $dst);
-			$time2 = mktime($_POST['thour'], $_POST['tminute'], 0, $_POST['month'], $_POST['day'], $_POST['year'], $dst);
+			$time1 = $time->make(0, $_POST['minute'], $_POST['hour'], $_POST['day'], $_POST['month'], $_POST['year']);
+			$time2 = $time->make(0, $_POST['tminute'], $_POST['thour'], $_POST['day'], $_POST['month'], $_POST['year']);
 		}
 		
 		// Take care of event recurrence
@@ -115,7 +107,7 @@ class Events {
 				break;
 			case 'weekly':
 				// Day of week
-				$dow = date('w', $time1);
+				$dow = $time->date('w', $time1);
 				$options = "$dow";
 				// Start Timestamp
 				$startstamp = $time1;
@@ -131,7 +123,7 @@ class Events {
 				break;
 			case 'monthly':
 				// Day of month
-				$dom = date('d', $time1);
+				$dom = $time->date('d', $time1);
 				$options = "$dom";
 				// Start Timestamp
 				$startstamp = $time1;
@@ -147,13 +139,13 @@ class Events {
 					$month = $monthTimes - ($yearsToAdd * 12);
 					$year = $_POST['year'] + $yearsToAdd;
 					
-					$endstamp = mktime(23, 59, 59, $month, $_POST['day'], $year);
+					$endstamp = $time->make(59, 59, 23, $_POST['day'], $month, $year);
 				}
 				$repeat = "$startstamp:$endstamp:monthly-$options";
 				break;
 			case 'yearly':
 				// Set options
-				$options = date('d', $time1) . ',' . date('m', $time1);
+				$options = $time->date('d', $time1) . ',' . $time->date('m', $time1);
 				// Start Timestamp
 				$startstamp = $time1;
 				// End Timestamp
@@ -163,7 +155,7 @@ class Events {
 				else {
 					// Make end timestamp
 					$year = $_POST['year'] + $_POST['times'] - 1;
-					$endstamp = mktime(23, 59, 59, $_POST['month'], $_POST['day'], $year);
+					$endstamp = $time->make(59, 59, 23, $_POST['day'], $_POST['month'], $year);
 				}
 				$repeat = "$startstamp:$endstamp:yearly-$options";
 				break;
@@ -245,7 +237,7 @@ class Events {
 			'alarm',
 			'status'
 		);
-		if ($pref->getvalue('ttype') == 'daylight') {
+		if ($pref->getvalue('ttype') == '12hr') {
 			$vars[] = 'tmeridiem';
 			$vars[] = 'meridiem';
 		}
@@ -255,10 +247,10 @@ class Events {
 			$vars[] = 'thour';
 			$vars[] = 'tminute';
 		}
-		if ($_POST['alarm'] == 'email') {
+		if (isset($_POST['alarm']) && $_POST['alarm'] == 'email') {
 			$vars[] = 'recipient';
 		}
-		if ($_POST['repeat'] != 'none') {
+		if (isset($_POST['repeat']) && $_POST['repeat'] != 'none') {
 			$vars[] = 'times';
 		}
 		

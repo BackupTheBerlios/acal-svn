@@ -37,7 +37,7 @@ class Prefs {
 		
 		// Define available prefs
 		$prefs = array(
-			array('ttype', 'world'),
+			array('ttype', '24hr'),
 			array('formt', 'html'),
 			array('test2', 'this is default'),
 			array('enable_alarms', $defval),

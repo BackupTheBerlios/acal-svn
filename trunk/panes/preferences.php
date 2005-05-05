@@ -84,13 +84,13 @@ switch ($showPref) {
 		
 		$ttype = $pref->getvalue('ttype');
 		echo '<p>Time: <select name="ttype">';
-		echo '<option value="daylight"';
-		if ($ttype == 'daylight') {
+		echo '<option value="12hr"';
+		if ($ttype == '12hr') {
 			echo ' selected="selected"';
 		}
 		echo '>12 Hour</option>';
-		echo '<option value="world"';
-		if ($ttype == 'world') {
+		echo '<option value="24hr"';
+		if ($ttype == '24hr') {
 			echo ' selected="selected"';
 		}
 		echo '>24 Hour</option>';

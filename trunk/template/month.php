@@ -176,9 +176,9 @@ if ($sidebar) {
 	// Time
 	echo '<label for="time">Time: </label>
 		<span id="time">';
-		if ($pref->getvalue('ttype') == 'world') {
+		if ($pref->getvalue('ttype') == '24hr') {
 			echo '<select name="hour" id="hour">';
-			if ($pref->getvalue('ttype') == 'world') {
+			if ($pref->getvalue('ttype') == '24hr') {
 				$hrs = 23;
 			}
 			else {
@@ -219,7 +219,7 @@ if ($sidebar) {
 			echo '<br>'; // *****************************  START END TIME ROW !!!!!!!!!!
 			
 			echo '<select name="thour" id="thour">';
-			if ($pref->getvalue('ttype') == 'world') {
+			if ($pref->getvalue('ttype') == '24hr') {
 				$hrs = 23;
 			}
 			else {
@@ -260,7 +260,7 @@ if ($sidebar) {
 		else {
 			// -------------------- 12 HOUR TIME !!!!!!!!
 			echo '<select name="hour" id="hour">';
-			if ($pref->getvalue('ttype') == 'world') {
+			if ($pref->getvalue('ttype') == '24hr') {
 				$hrs = 23;
 			}
 			else {
@@ -319,7 +319,7 @@ if ($sidebar) {
 			echo '<br>'; // ******************* START END TIME ROW !!!!!!!!!!!!!!!!!!
 			
 			echo '<select name="thour" id="thour">';
-			if ($pref->getvalue('ttype') == 'world') {
+			if ($pref->getvalue('ttype') == '24hr') {
 				$hrs = 23;
 			}
 			else {
@@ -610,7 +610,7 @@ while ($i <= $cset['days']) {
 	
 	// Take care of events
 	$timestamp1 = $time->make(0, 0, 0, $requests['day'], $requests['month'], $requests['year']);
-	$timestamp2 = $time->make(23, 59, 59, $requests['day'], $requests['month'], $requests['year']);
+	$timestamp2 = $time->make(59, 59, 23, $requests['day'], $requests['month'], $requests['year']);
 	$events = get_events($timestamp1, $timestamp2);
 	foreach ($events as $event) {
 		echo '<div class="event"';

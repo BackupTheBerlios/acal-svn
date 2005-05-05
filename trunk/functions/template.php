@@ -99,12 +99,6 @@ function edit_requests($name, $value, $uri = NULL, $remove = false) {
 	return $req;
 }
 
-// Create popup link. Will return attribute with value.
-function popup($url) {
-	$link = 'href="javascript:void(0)" onclick="popUp(\'' . $url . '\')"';
-	return $link;
-}
-
 // Put all the date variables into an array (Set C)
 function cset() {
 	global $time;
@@ -151,7 +145,7 @@ function cset() {
 	
 	global $pref;
 	// Next hour
-	if ($pref->getvalue('ttype') == 'world') {
+	if ($pref->getvalue('ttype') == '24hr') {
 		if ($time->now['hour'] < 23) {
 			$arr['nexthr'] = sprintf('%02d', $time->now['hour'] + 1);
 		}
@@ -187,6 +181,7 @@ function cset() {
 // Return events that match the timestamp
 function get_events($timestamp1, $timestamp2) {
 	global $db;
+	global $time;
 	$sql = "SELECT * FROM events WHERE fromtime >= '$timestamp1' AND totime <= '$timestamp2' OR repeat <> 'none'";
 	$cols = array(
 		'id',
@@ -225,7 +220,7 @@ function get_events($timestamp1, $timestamp2) {
 			// Take care of weekly stuff
 			if ($typ[0] == 'weekly') {
 				// Check day of week
-				$dow = date('w', $timestamp1);
+				$dow = $time->date('w', $timestamp1);
 				if ($dow == $typ[1]) {
 					// Make sure we are within bounds
 					if ($rep[0] <= $timestamp1) {
@@ -242,7 +237,7 @@ function get_events($timestamp1, $timestamp2) {
 			// Take care of monthly stuff
 			if ($typ[0] == 'monthly') {
 				// Check day of month
-				$dow = date('d', $timestamp1);
+				$dow = $time->date('d', $timestamp1);
 				if ($dow == $typ[1]) {
 					// Make sure we are within bounds
 					if ($rep[0] <= $timestamp1) {
@@ -262,7 +257,7 @@ function get_events($timestamp1, $timestamp2) {
 				$dm = explode(',', $typ[1]);
 				$day = $dm[0];
 				$month = $dm[1];
-				if (date('d', $timestamp1) == $day && date('m', $timestamp1) == $month) {
+				if ($time->date('d', $timestamp1) == $day && $time->date('m', $timestamp1) == $month) {
 					// Make sure we are within bounds
 					if ($rep[0] <= $timestamp1) {
 						if ($rep[1] >= $timestamp2 || $rep[1] == '0') {
