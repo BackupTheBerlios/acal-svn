@@ -71,9 +71,9 @@ else {
 	echo '<a href="'. pend_requests(array('layer' => 'preferences')) . '">' . Login . '</a>';
 }
 
-echo '<a href="&amp;view=day"><img src="images/day_view_btn.png" alt="Day View" /></a>';
-echo '<a href="&amp;view=week"><img src="images/week_view_btn.png" alt="Week View" /></a>';
-echo '<a href="&amp;view=month"><img src="images/month_view_btn.png" alt="Month View" /></a>';
+echo '<a href="#"><img src="images/day_view_btn.png" alt="Day View" /></a>';
+echo '<a href="#"><img src="images/week_view_btn.png" alt="Week View" /></a>';
+echo '<a href="' . $_SERVER['REQUEST_URI'] . '"><img src="images/month_view_btn.png" alt="Month View" /></a>';
 echo '</div>';
 
 // Print the data&time
