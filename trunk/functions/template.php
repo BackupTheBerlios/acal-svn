@@ -159,8 +159,9 @@ function cset() {
 		if ($time->now['hour'] > 12) {
 			$arr['hour'] = sprintf('%02d', $time->now['hour'] - 12);
 		}
-		if ($arr['hour'] == 12) {
+		if ($time->now['hour'] == 12) {
 			$arr['thour'] = '01';
+			$arr['hour'] = '12';
 			if ($arr['xm'] == 'am') {
 				$arr['txm'] = 'pm';
 			}
@@ -170,7 +171,13 @@ function cset() {
 		}
 		else {
 			$arr['txm'] = $arr['xm'];
+			if (!isset($arr['hour'])) {
+				$arr['hour'] = $time->now['hour'];
+			}
 			$arr['thour'] = sprintf('%02d', $arr['hour'] + 1);
+		}
+		if (!isset($arr['hour'])) {
+			$arr['hour'] = $time->now['hour'];
 		}
 	}
 	
