@@ -29,7 +29,6 @@ $cfg = simplexml_load_file('configuration.xml');
 // Do a requirements check!
 include('classes/check.php');
 $check = new checkReq();
-$check->check(); // So it will still work with PHP 4
 
 // Include needed files
 require_once('classes/locale.php');

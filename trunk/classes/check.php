@@ -21,7 +21,7 @@
 // Check to make sure the basic requirements are met
 
 class checkReq {
-	function check() {
+	function __construct() {
 		global $cfg;
 		
 		// Make sure PHP is new enough.
