@@ -37,7 +37,6 @@ $availablePrefPanes = array(
 	'datetime' => Date_and_Time,
 	'users' => Users_and_Groups,
 	'locale' => Localization,
-	'template' => Template,
 	'alarm' => Alarm,
 );
 echo '<div id="Prefs" class="open">';
@@ -79,39 +78,6 @@ else { // Continue but ignore this statement when it comes to indenting
 
 // Print out the correct preference pane
 switch ($showPref) {
-	case "template":
-		echo '<h2>' . Template . ' ' . Preferences . '</h2>';
-		
-		$ttype = $pref->getvalue('ttype');
-		echo '<p>Time: <select name="ttype">';
-		echo '<option value="12hr"';
-		if ($ttype == '12hr') {
-			echo ' selected="selected"';
-		}
-		echo '>12 Hour</option>';
-		echo '<option value="24hr"';
-		if ($ttype == '24hr') {
-			echo ' selected="selected"';
-		}
-		echo '>24 Hour</option>';
-		echo '</select></p>';
-		
-		echo '<p>Forms: <select name="formt">';
-		$formt = $pref->getvalue('formt');
-		echo '<option value="html"';
-		if ($formt == 'html') {
-			echo ' selected="selected"';
-		}
-		echo '>Use HTML</option>';
-		echo '<option value="xforms"';
-		if ($formt == 'xforms') {
-			echo ' selected="selected"';
-		}
-		echo '>Use XForms</option>';
-		echo '</select></p>';
-		
-		echo '<input type="hidden" name="pref_action" value="ttype:formt">';
-		break;
 	case "general":
 		echo '<h2>' . General . ' ' . Preferences . '</h2>';
 		
@@ -190,7 +156,21 @@ switch ($showPref) {
 		}
 		echo '</select><p>';
 		
-		echo '<input type="hidden" name="pref_action" value="timezone" />';
+		$ttype = $pref->getvalue('ttype');
+		echo '<p>Time: <select name="ttype">';
+		echo '<option value="12hr"';
+		if ($ttype == '12hr') {
+			echo ' selected="selected"';
+		}
+		echo '>12 Hour</option>';
+		echo '<option value="24hr"';
+		if ($ttype == '24hr') {
+			echo ' selected="selected"';
+		}
+		echo '>24 Hour</option>';
+		echo '</select></p>';
+		
+		echo '<input type="hidden" name="pref_action" value="timezone:ttype" />';
 		break;
 	case 'users':
 		echo '<h2>' . Users_and_Groups . ' ' . Preferences . '</h2>';
