@@ -20,11 +20,16 @@
 
 // Localization class
 class Locale {
-	private $locale = 'English';
+	public $locale = 'English';
 	private $xml;
 	public $langs = array();
 
 	function __construct() {
+		if (isset($_POST['language'])) {
+			// Set a session variable with the users selection
+			$_SESSION['USER_LANGUAGE'] = $_POST['language'];
+		}
+		
 		// Get available locales
 		$langs = scandir('languages');
 		foreach ($langs as $lang) {
@@ -35,7 +40,12 @@ class Locale {
 		
 		// What locale to load?
 		global $pref;
-		$this->locale = $pref->getvalue('locale');
+		if (!isset($_SESSION['USER_LANGUAGE'])) {
+			$this->locale = $pref->getvalue('locale');
+		}
+		else {
+			$this->locale = $_SESSION['USER_LANGUAGE'];
+		}
 		
 		// Load localization
 		$this->xml = simplexml_load_file('languages/' . $this->locale . '.xml');

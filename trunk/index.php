@@ -56,14 +56,14 @@ $db->open('acal3');
 // Create preferences object
 $pref = new Prefs();
 
+// Create users object
+$users = new Users();
+
 // Start localization
 $locale = new Locale();
 
 // Create time object
 $time = new Time();
-
-// Create users object
-$users = new Users();
 
 // Start template engine
 $tpl = new Tpl();

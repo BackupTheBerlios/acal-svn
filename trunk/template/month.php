@@ -81,12 +81,12 @@ echo '<span id="bartime">' . It_is_now . ' ' . $time->date('Y-m-d', $time->times
 
 // Language menu
 if ($pref->prefs['showLangMenu'] == 'true') {
-	echo '<form method="post" action="' . str_replace('&', '&amp;', $_SERVER['REQUEST_URI']) . '">';
-	echo Language . ' <select name="language">';
+	echo '<form method="post" id="langSwitch" name="langSwitch" action="' . str_replace('&', '&amp;', $_SERVER['REQUEST_URI']) . '">';
+	echo Language . ' <select name="language" onchange="document.langSwitch.submit()">';
 	global $locale;
 	foreach ($locale->langs as $lang) {
 		echo '<option value="' . $lang . '"';
-		if ($pref->prefs['locale'] == $lang) {
+		if ($locale->locale == $lang) {
 			echo ' selected="selected"';
 		}
 		echo '>' . $lang . '</option>';
