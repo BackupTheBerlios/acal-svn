@@ -71,6 +71,7 @@
 	<str name="Localization">Localization</str>
 	<str name="Template">Template</str>
 	<str name="Users_and_Groups">Users &amp; Groups</str>
+	<str name="Categories">Categories</str>
 	
 	<!-- Phrases -->
 	<str name="Event_has_been_saved">Event has been saved</str>

@@ -73,6 +73,7 @@
 	<str name="Localization">Lokalisation</str>
 	<str name="Template">Schablone</str>
 	<str name="Users_and_Groups">Benutzer U. Gruppen</str>
+	<str name="Categories">Kategorien</str>
 	
 	<!-- Phrases -->
 	<str name="Event_has_been_saved">Fall ist gespeichert worden</str>

@@ -38,6 +38,7 @@ $availablePrefPanes = array(
 	'users' => Users_and_Groups,
 	'locale' => Localization,
 	'alarm' => Alarm,
+	'categories' => Categories
 );
 echo '<div id="Prefs" class="open">';
 
@@ -291,6 +292,33 @@ switch ($showPref) {
 		</div>
 		</fieldset>
 		<input type="hidden" name="edit_stuff" value="true" />';
+		break;
+	case 'categories':
+		echo '<h2>' . Categories . ' ' . Preferences . '</h2>';
+		echo '<p>New Category Name: <input type="text" name="newcatname" size="20" /></p>';
+		echo '<p>New Category Color: 
+		<img src="images/aqua_color.png" alt="Aqua" /><input type="radio" name="newcatcolor" value="aqua" />
+		<img src="images/black_color.png" alt="Black" /><input type="radio" name="newcatcolor" value="black" />
+		<img src="images/blue_color.png" alt="Blue" /><input type="radio" name="newcatcolor" value="blue" />
+		<img src="images/fuchsia_color.png" alt="Fuchsia" /><input type="radio" name="newcatcolor" value="fuchsia" />
+		<img src="images/gray_color.png" alt="Gray" /><input type="radio" name="newcatcolor" value="gray" />
+		<img src="images/green_color.png" alt="Green" /><input type="radio" name="newcatcolor" value="green" />
+		<img src="images/lime_color.png" alt="Lime" /><input type="radio" name="newcatcolor" value="lime" />
+		<img src="images/maroon_color.png" alt="Maroon" /><input type="radio" name="newcatcolor" value="maroon" />
+		<img src="images/navy_color.png" alt="Navy" /><input type="radio" name="newcatcolor" value="navy" />
+		<img src="images/olive_color.png" alt="Olive" /><input type="radio" name="newcatcolor" value="olive" />
+		<img src="images/orange_color.png" alt="Orange" /><input type="radio" name="newcatcolor" value="orange" />
+		<img src="images/purple_color.png" alt="Purple" /><input type="radio" name="newcatcolor" value="purple" />
+		<img src="images/silver_color.png" alt="Silver" /><input type="radio" name="newcatcolor" value="silver" />
+		<img src="images/teal_color.png" alt="Teal" /><input type="radio" name="newcatcolor" value="teal" />
+		<img src="images/white_color.png" alt="White" /><input type="radio" name="newcatcolor" value="white" />
+		<img src="images/yellow_color.png" alt="Yellow" /><input type="radio" name="newcatcolor" value="yellow" />
+		</p>';
+		
+		echo '<p>Delete Category: <select name="delcat">
+		
+		</select>
+		</p>';
 		break;
 }
 
