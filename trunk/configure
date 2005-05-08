@@ -141,7 +141,6 @@ switch ($GLOBALS['database']) {
 		// Make sure sqlite_path has trailing slash
 		if (substr($xml->sqlite_path, strlen($xml->sqlite_path) - 1, 1) != '/' && $GLOBALS['database'] != 'UNDER_DOCUMENT_ROOT') {
 			$xml->sqlite_path .= '/';
-			echo " +/ ";
 		}
 		break;
 	case "mysqli":
@@ -156,7 +155,7 @@ echo " Done.\n";
 // Save new XML file
 echo "Saving new configuration...";
 if (!file_put_contents('configuration.xml', $xml->asXML())) {
-	exit("Error: Could not write to configuration.xml\n");
+	exit("\nError: Could not write to configuration.xml\n");
 }
 echo " Good\n";
 
