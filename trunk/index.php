@@ -46,7 +46,8 @@ $tables = array(
 	array('alarms', 'id VARCHAR(128), msg VARCHAR(700000), method VARCHAR(2048), status VARCHAR(1024)'),
 	array('notes', 'id VARCHAR(256), note VARCHAR(555000), flags VARCHAR(5120)'),
 	array('users', 'user VARCHAR(128), password VARCHAR(128), groups VARCHAR(128)'),
-	array('groups', 'name VARCHAR(128), rights VARCHAR(128)')
+	array('groups', 'name VARCHAR(128), rights VARCHAR(128)'),
+	array('categories', 'category VARCHAR(128), color VARCHAR(64)')
 );
 $db = new StartDB($cfg->db, $tables);
 

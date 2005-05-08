@@ -20,11 +20,43 @@
 
 // When a form is submitted change categories as needed
 function acal_change_categories() {
-	
+	global $db;
+	if (isset($_POST['change_cats']) && $_POST['change_cats'] == 'true') {
+		// Add category is needed
+		if ($_POST['newcatname'] != '') {
+			if (!isset($_POST['newcatcolor'])) {
+				$_POST['newcatcolor'] = 'white';
+			}
+			
+			$rows = array(
+				'table' => 'categories',
+				$_POST['newcatname'],
+				$_POST['newcatcolor']
+			);
+			$db->save_rows($rows, 'create');
+		}
+		
+		// Delete category if needed
+		if (isset($_POST['realdel'])) {
+			$rows = array(
+				'table' => 'categories',
+				'sqlWhere' => array('category', $_POST['delcat'])
+			);
+			$db->save_rows($rows, 'delete');
+		}
+	}
 }
 
 // Will attempt to retrieve category info. If not available will return default values.
 function acal_get_category($name) {
 	
+}
+
+// Return a list of categories
+function acal_get_categories() {
+	global $db;
+	$data = $db->fetch_rows_array("SELECT * FROM categories", array('category', 'color'));
+	print_r($data);
+	return $data;
 }
 ?>

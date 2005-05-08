@@ -23,4 +23,5 @@
 include_once('functions/template.php');
 include_once('functions/alarm.php');
 include_once('functions/panes.php');
+include_once('functions/categories.php');
 ?>

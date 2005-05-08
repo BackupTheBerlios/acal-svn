@@ -294,6 +294,8 @@ switch ($showPref) {
 		<input type="hidden" name="edit_stuff" value="true" />';
 		break;
 	case 'categories':
+		acal_change_categories();
+		
 		echo '<h2>' . Categories . ' ' . Preferences . '</h2>';
 		echo '<p>New Category Name: <input type="text" name="newcatname" size="20" /></p>';
 		echo '<p>New Category Color: 
@@ -316,9 +318,16 @@ switch ($showPref) {
 		</p>';
 		
 		echo '<p>Delete Category: <select name="delcat">
-		
-		</select>
+		';
+		$cats = acal_get_categories();
+		foreach ($cats as $cat) {
+			echo '<option value="' . $cat['category'] . '">' . $cat['category'] . '</option>';
+		}
+		echo '
+		</select> <input type="checkbox" name="realdel" value="true" />
 		</p>';
+		
+		echo '<input type="hidden" name="change_cats" value="true" />';
 		break;
 }
 
