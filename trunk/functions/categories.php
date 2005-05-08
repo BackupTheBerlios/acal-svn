@@ -49,14 +49,15 @@ function acal_change_categories() {
 
 // Will attempt to retrieve category info. If not available will return default values.
 function acal_get_category($name) {
-	
+	global $db;
+	$data = $db->fetch_rows_array("SELECT * FROM categories WHERE category = '$name'", array('category', 'color'));
+	return $data[0];
 }
 
 // Return a list of categories
 function acal_get_categories() {
 	global $db;
 	$data = $db->fetch_rows_array("SELECT * FROM categories", array('category', 'color'));
-	print_r($data);
 	return $data;
 }
 ?>

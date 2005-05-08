@@ -199,7 +199,8 @@ function get_events($timestamp1, $timestamp2) {
 		'status',
 		'repeat',
 		'alarm',
-		'notes'
+		'notes',
+		'category'
 	);
 	
 	// Get events

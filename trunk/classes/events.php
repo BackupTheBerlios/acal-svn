@@ -165,7 +165,7 @@ class Events {
 		}
 		
 		// Category not working yet
-		$category = 'default';
+		$category = $_POST['category'];
 		
 		switch ($this->what) {
 			case 'create':
@@ -275,6 +275,7 @@ class Events {
 	// Load a current event into array
 	function loadEvent() {
 		global $db;
+		global $time;
 		
 		// Event ID
 		$id = $_GET['event'];
@@ -288,25 +289,27 @@ class Events {
 			$event[$key] = $eventCol;
 		}
 		
-		if (date('H:i', $event['totime']) == '23:59' && date('H:i', $event['fromtime']) == '00:00') {
+		if ($time->date('H:i', $event['totime']) == '23:59' && $time->date('H:i', $event['fromtime']) == '00:00') {
 			$event['all-day'] = true;
 		}
 		else {
 			$event['all-day'] = false;
 		}
 		
-		$event['hour'] = date('H', $event['fromtime']);
-		$event['minute'] = date('i', $event['fromtime']);
-		$event['thour'] = date('H', $event['totime']);
-		$event['tminute'] = date('i', $event['totime']);
-		$event['xm'] = date('a', $event['fromtime']);
-		$event['txm'] = date('a', $event['totime']);
+		$event['hour'] = $time->date('H', $event['fromtime']);
+		$event['minute'] = $time->date('i', $event['fromtime']);
+		$event['thour'] = $time->date('H', $event['totime']);
+		$event['tminute'] = $time->date('i', $event['totime']);
+		$event['xm'] = $time->date('a', $event['fromtime']);
+		$event['txm'] = $time->date('a', $event['totime']);
 		
 		$event['recurrence'] = explode(':', $event['repeat']);
-		$event['rtime1'] = $event['recurrence'][0];
-		$event['rtime2'] = $event['recurrence'][1];
-		$event['recurrence'] = explode('-', $event['recurrence'][2]);
-		$event['recurrence'] = $event['recurrence'][0];
+		if ($event['recurrence'][0] != 'none') {
+			$event['rtime1'] = $event['recurrence'][0];
+			$event['rtime2'] = $event['recurrence'][1];
+			$event['recurrence'] = explode('-', $event['recurrence'][2]);
+			$event['recurrence'] = $event['recurrence'][0];
+		}
 		
 		
 		// Calculate times

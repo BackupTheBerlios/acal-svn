@@ -410,7 +410,22 @@ if ($sidebar) {
 	echo '>Cancelled</option>';
    	echo '</select></span>';
    	
-   	// Repeat
+   	// Category
+	echo '<label for="category">Category: </label>
+		<span><select name="category" id="category">
+		<option value="none">None</option>';
+	foreach (acal_get_categories() as $cat) {
+		echo '<option value="' . $cat['category'] . '" style="background-color: ' . $cat['color'] . ';"';
+		if ($event) {
+			if ($event['category'] == $cat['category']) {
+				echo ' selected="selected"';
+			}
+		}
+		echo '>' . $cat['category'] . '</option>';
+	}
+	echo '</select></span>';
+	
+	// Repeat
    	echo '<label for="repeat">Repeat: </label>
    		<span><select name="repeat" id="repeat" onchange="repeattoggle()">
    		<option value="none"';
@@ -618,7 +633,12 @@ while ($i <= $cset['days']) {
 		// Take care of event status stuff
 		echo ' id="status_' . $event['status'] . '"';
 		
-		echo '><span class="event_sum">' . $event['summary'];
+		echo '><span class="event_sum"';
+		if ($event['category'] != 'none') {
+			$cat = acal_get_category($event['category']);
+			echo ' style="background-color: ' . $cat['color'] . '"'; 
+		}
+		echo '>' . $event['summary'];
 		
 		echo '<span class="menu">';
 		$requests['event'] = $event['id'];
