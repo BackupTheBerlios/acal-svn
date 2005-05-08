@@ -18,22 +18,4 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-global $time;
-echo '<p>In one hour it will be ' . $time->offset / 3600 . ' | ' . $time->now['hour'] . '<br />';
-// Make a timestamp
-$stamp = $time->make($time->now['second'], $time->now['minute'], $time->now['hour'], $time->now['day'], $time->now['month'], $time->now['year']);
-
-echo "<br />GMT timestamp is $stamp which = " . $time->date('c', $stamp) . ' in this time zone.<br />';
-if ($time->timeZone->inDaylightTime($time->time)) {
-	echo 'We are in DST';
-}
-else {
-	echo 'We are not in DST';
-}
-echo '<p>';
-
-/*
-echo '<pre>';
-print_r($time->availableZones);
-echo '</pre>';*/
 ?>
