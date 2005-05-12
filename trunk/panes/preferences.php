@@ -238,7 +238,7 @@ switch ($showPref) {
 			echo '<p class="message">' . ERROR_MSG . '</p>';
 		}
 		echo '<p>Edit User: <select name="edituser" onchange="jumpTo(this);">
-		<option value=" ' . edit_requests('edituser', NULL, REQUEST_URI, true) . '"> ---- </option>';
+		<option value=" ' . edit_requests('edituser', NULL, $_SERVER['REQUEST_URI'], true) . '"> ---- </option>';
 		foreach ($users->users as $username => $user) {
 			$req = array(
 				'edituser' => $username

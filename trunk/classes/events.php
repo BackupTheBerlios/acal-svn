@@ -56,6 +56,7 @@ class Events {
 		// Make db and time global
 		global $db;
 		global $time;
+		global $pref;
 		
 		// Create alarm if needed
 		if ($_POST['alarm'] != 'none') {
@@ -82,9 +83,31 @@ class Events {
 			$time2 = $time->make(59, 59, 23, $_POST['day'], $_POST['month'], $_POST['year']);
 		}
 		else {
-			// Create the timestamps for this event
-			$time1 = $time->make(0, $_POST['minute'], $_POST['hour'], $_POST['day'], $_POST['month'], $_POST['year']);
-			$time2 = $time->make(0, $_POST['tminute'], $_POST['thour'], $_POST['day'], $_POST['month'], $_POST['year']);
+			// If used 12 hour time convert to 24hr for creating the timestamp
+			if ($pref->prefs['ttype'] == '12hr') {
+				// Do time1 first
+				if ($_POST['meridiem'] == 'am') {
+					$time1 = $time->make(0, $_POST['minute'], $_POST['hour'], $_POST['day'], $_POST['month'], $_POST['year']);
+				}
+				else {
+					$hour = $_POST['hour'] + 12;
+					$time1 = $time->make(0, $_POST['minute'], $hour, $_POST['day'], $_POST['month'], $_POST['year']);
+				}
+				
+				// Then do time2
+				if ($_POST['tmeridiem'] == 'am') {
+					$time2 = $time->make(0, $_POST['tminute'], $_POST['thour'], $_POST['day'], $_POST['month'], $_POST['year']);
+				}
+				else {
+					$hour = $_POST['thour'] + 12;
+					$time2 = $time->make(0, $_POST['tminute'], $hour, $_POST['day'], $_POST['month'], $_POST['year']);
+				}
+			}
+			else {
+				// Create the timestamps for this event
+				$time1 = $time->make(0, $_POST['minute'], $_POST['hour'], $_POST['day'], $_POST['month'], $_POST['year']);
+				$time2 = $time->make(0, $_POST['tminute'], $_POST['thour'], $_POST['day'], $_POST['month'], $_POST['year']);
+			}
 		}
 		
 		// Take care of event recurrence
@@ -276,6 +299,7 @@ class Events {
 	function loadEvent() {
 		global $db;
 		global $time;
+		global $pref;
 		
 		// Event ID
 		$id = $_GET['event'];
@@ -296,9 +320,16 @@ class Events {
 			$event['all-day'] = false;
 		}
 		
-		$event['hour'] = $time->date('H', $event['fromtime']);
+		if ($pref->prefs['ttype'] == '24hr') {
+			$event['hour'] = $time->date('H', $event['fromtime']);
+			$event['thour'] = $time->date('H', $event['totime']);
+		}
+		else {
+			$event['hour'] = $time->date('h', $event['fromtime']);
+			$event['thour'] = $time->date('h', $event['totime']);
+		}
+		
 		$event['minute'] = $time->date('i', $event['fromtime']);
-		$event['thour'] = $time->date('H', $event['totime']);
 		$event['tminute'] = $time->date('i', $event['totime']);
 		$event['xm'] = $time->date('a', $event['fromtime']);
 		$event['txm'] = $time->date('a', $event['totime']);
