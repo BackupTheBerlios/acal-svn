@@ -38,6 +38,11 @@ class StartDB {
 	
 	// Open database connection
 	function open($name) {
+		global $cfg;
+		if ($cfg->prefix != '') {
+			$name = $cfg->prefix . $name;
+		}
+		
 		$this->dbHandle = $this->layer->connect($name);
 		
 		// Make sure all the tables exist

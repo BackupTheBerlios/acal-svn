@@ -19,8 +19,7 @@
 -->
 <config>
 	<db>sqlite</db> <!-- Look inside the db directory for available options. -->
-	<prefix/> <!-- Prefix database so it won't interfere with other installations. -->
-	<!-- Prefixing is currently not working. -->
+	<prefix>unstable</prefix> <!-- Prefix database so it won't interfere with other installations. -->
 	
 	<!-- SQLite Options -->
 	<sqlite_path>/tmp/</sqlite_path> <!-- Path to writable directory for storing database. Default value of UNDER_DOCUMENT_ROOT keyword should work for default Apache/PHP installations. -->
