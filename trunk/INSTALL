@@ -21,6 +21,8 @@ ACal - Web Calendar
 
 <db/> What database the calendar should use. Currently sqlite and mysqli are supported.
 
+<prefix/> Something to prefix your database with so it won't interfere with other installations.
+
 <sqlite_path/> If you are using SQLite which is default, this tells ACal where to store
 	the database files. The default value of UNDER_DOCUMENT_ROOT should work fine if
 	you compiled and installed Apache2 from source using the default settings.
@@ -33,11 +35,11 @@ ACal - Web Calendar
 
 ## Upgrading from ACal 3.0 Alpha 1 ##
 
-It is highly recommended that you completely remove the acal3 SQLite or MySQL database before upgrading to Alpha 2.
+It is highly recommended that you completely remove the acal3 SQLite or MySQL database before upgrading to later releases.
 The reason for this is the tables have been modified and are not compatible. You will likely get errors if you don't.
 
 It should also be noted that Firefox (Gecko) and Safari (WebCore) are the only browsers that can currently render the
-web pages correctly. We will work on this for the beta.
+web pages correctly. We will work on this for the beta. If you would like to help contact Arthur. (See below)
 
 ## Notes ##
 
