@@ -7,6 +7,8 @@ ACal - Web Calendar
 	It will check to make sure everything is working and ask you a few questions.
  2) Copy the calendar folder to your document root.
  3) Go to it in your web browser. Example: http://localhost/calendar/
+ 4) Click on the login link and login using the username: admin and password: admin.
+ 5) Change your password (Highly Recommended)
 
 
 ## Installing on a Remote FTP Server ##
@@ -16,6 +18,8 @@ ACal - Web Calendar
 	Change whatever you need to. See the Configuration section below.
  2) Upload the calendar folder to your web server using your FTP client.
  3) Go to it in your web browser. Example: http://my.host.tld/calendar/
+ 4) Click on the login link and login using the username: admin and password: admin.
+ 5) Change your password (Highly Recommended)
 
 ## Configuration.xml ##
 
