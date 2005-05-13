@@ -30,6 +30,7 @@ $cfg = simplexml_load_file('configuration.xml');
 global $cfg;
 
 // Include Console_Getopt which is installed by default along with PEAR
+// Maybe in the future we should bundle this with ACal?
 require_once('Console/Getopt.php');
 
 // Initialize Console_Getopt
@@ -112,6 +113,7 @@ class alarm {
 				$this->db->run($sql);
 				
 				// Send email
+				
 				
 				exit("Email Sent!\n");
 				break;

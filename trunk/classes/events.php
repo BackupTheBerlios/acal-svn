@@ -70,11 +70,18 @@ class Events {
 			$timestamp = $time->make(0, $_POST['minute'], $_POST['hour'], $_POST['day'], $_POST['month'], $_POST['year']);
 			
 			// Insert Alarm into DB
-			$sql = "INSERT INTO alarms VALUES('$alarmID', '$msg', '$type', '$timestamp')";
+			$sql = "INSERT INTO alarms VALUES('$alarmID', '$msg', '$type', '$timestamp', '')";
 			$db->run($sql);
 			
 			// Execute alarm
-			exec("./bin/acal_alarm -n $alarmID -m $type -t $timestamp >/dev/null &");
+			if (substr(PHP_OS, 0, 3) == 'WIN') {
+				// On Windows
+				pclose(popen("start bin/acal_alarm.bat -n $alarmID -m $type -t $timestamp", "r"));
+			}
+			else {
+				// On *nixes
+				exec("./bin/acal_alarm -n $alarmID -m $type -t $timestamp >/dev/null &");
+			}
 		}
 		
 		// Check if event is all day

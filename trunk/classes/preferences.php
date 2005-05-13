@@ -28,7 +28,7 @@ class Prefs {
 		global $db;
 		
 		// Try to detect OS in order to enable/disable alarms. Cannot risk false positives.
-		if (PHP_OS == "Darwin" || PHP_OS == "Linux") {
+		if (PHP_OS == "Darwin" || PHP_OS == "Linux" || substr(PHP_OS, 0, 3) == 'WIN') {
 			$defval = 'true';
 		}
 		else {

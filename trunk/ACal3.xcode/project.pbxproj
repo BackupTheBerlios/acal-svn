@@ -54,6 +54,7 @@
 		8E0FC9350789A1870031FA32 = {
 			children = (
 				8E0FC9390789A1FE0031FA32,
+				8EDFD1950834F3EF00EBD07B,
 			);
 			isa = PBXGroup;
 			path = bin;
@@ -819,6 +820,14 @@
 			isa = PBXFileReference;
 			lastKnownFileType = text.script.php;
 			path = categories.php;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		8EDFD1950834F3EF00EBD07B = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text.script.sh;
+			path = acal_alarm.bat;
 			refType = 4;
 			sourceTree = "<group>";
 		};
