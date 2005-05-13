@@ -1,1 +1,1 @@
-@c:\php\php.exe %~n0 %*
+@c:\php\php-win.exe %~n0 %*
