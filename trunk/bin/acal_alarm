@@ -65,6 +65,7 @@ if (count($opts) > 0) {
 				break;
 			case 't':
 				define('Timestamp', $opt[1]);
+				echo "Timestamp is: " . gmdate('c', Timestamp) . "\n";
 				break;
 			case 'n':
 				define('DBName', $opt[1]);
@@ -121,7 +122,7 @@ class alarm {
 				// Update row with active status which will last 15 minutes
 				$sql = "UPDATE alarms SET status = 'active' WHERE id = '" . DBName . "'";
 				if ($this->db->run($sql)) {
-				    echo "Status Updated\n";
+				    echo "Status Updated at " . gmdate('c', time()) . "\n";
 				}
 				else {
 				    echo "Error: Status could not be updated\n";
@@ -137,7 +138,7 @@ class alarm {
 		// Remove SQL record
 		$sql = "DELETE FROM alarms WHERE id = '" . DBName . "'";
 		$this->db->run($sql);
-		exit("Posted and removed message!\n");
+		exit("Timed out at: " . gmdate('c', time()) . "\n");
 	}
 }
 
