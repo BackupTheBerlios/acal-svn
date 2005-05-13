@@ -131,17 +131,6 @@ class Users {
 		
 		// Define groups array
 		$groups = $db->fetch_rows_array("SELECT * FROM groups", array('name', 'rights'));
-		// "Fix" array
-		foreach ($groups as $group) {
-			$this->groups[$group['name']] = explode(',', $group['rights']);
-		}
-		
-		// Define users array
-		$users = $db->fetch_rows_array("SELECT * FROM users", array('user', 'password', 'groups'));
-		// "Fix" array
-		foreach ($users as $user) {
-			$this->users[$user['user']] = array('password' => $user['password'], 'groups' => explode(',', $user['groups']));
-		}
 		
 		// If there are no groups than create a default group and user
 		if (count($groups) == 0) {
@@ -151,6 +140,21 @@ class Users {
 			
 			// Make a default admin user
 			$this->newUser('admin', 'admin', 'admin');
+			
+			// Reload groups array
+			$groups = $db->fetch_rows_array("SELECT * FROM groups", array('name', 'rights'));
+		}
+		
+		// "Fix" groups array
+		foreach ($groups as $group) {
+			$this->groups[$group['name']] = explode(',', $group['rights']);
+		}
+		
+		// Define users array
+		$users = $db->fetch_rows_array("SELECT * FROM users", array('user', 'password', 'groups'));
+		// "Fix" array
+		foreach ($users as $user) {
+			$this->users[$user['user']] = array('password' => $user['password'], 'groups' => explode(',', $user['groups']));
 		}
 		
 		if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
