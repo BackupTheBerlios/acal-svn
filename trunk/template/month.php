@@ -77,7 +77,13 @@ echo '<a href="' . $_SERVER['REQUEST_URI'] . '"><img src="images/month_view_btn.
 echo '</div>';
 
 // Print the data&time
-echo '<span id="bartime">' . It_is_now . ' ' . $time->date('Y-m-d', $time->timestamp) . ' [' . $time->date('H:ia', $time->timestamp) . ']</span>';
+echo '<span id="bartime">' . It_is_now . ' ' . $time->date('Y-m-d', $time->timestamp) . ' [';
+if ($pref->prefs['ttype'] == '12hr') {
+	echo $time->date('h:ia', $time->timestamp) . ']</span>';
+}
+else {
+	echo $time->date('H:i', $time->timestamp) . ']</span>';
+}
 
 // Language menu
 if ($pref->prefs['showLangMenu'] == 'true') {
