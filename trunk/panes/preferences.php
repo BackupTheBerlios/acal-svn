@@ -194,7 +194,6 @@ switch ($showPref) {
 		if (isset($_GET['editgroup'])) {
 			// Get that group information
 			$groupInfo = $users->groups[$_GET['editgroup']];
-			$groupInfo = explode(',', $groupInfo);
 		}
 		else {
 			$groupInfo = array();
