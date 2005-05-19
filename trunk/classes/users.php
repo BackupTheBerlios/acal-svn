@@ -39,7 +39,7 @@ class Users {
 		// If groups manager form has been submitted change stuff
 		if (isset($_POST['edit_stuff']) && $_POST['edit_stuff'] == 'true') {
 			// Should we create a new group?
-			if ($_POST['newgroup'] != '') {
+			if (isset($_POST['newgroup']) && $_POST['newgroup'] != '') {
 				// Put together rights
 				$rights = array();
 				if (isset($_POST['admin'])) {
@@ -71,7 +71,7 @@ class Users {
 			}
 		}
 		
-		// If groups manager form has been submitted change stuff
+		// If users manager form has been submitted change stuff
 		if (isset($_POST['edit_stuff']) && $_POST['edit_stuff'] == 'true') {
 			// Maybe we should add a user
 			if (isset($_POST['newusername'])) {
@@ -93,8 +93,18 @@ class Users {
 						define('ERROR_MSG', 'Error: User is not a member of any group(s).');
 					}
 					else {
+						if (!isset($_POST['useremail']) || $_POST['useremail'] == '') {
+							$email = '';
+							if (!defined('ERROR_MSG')) {
+								define('ERROR_MSG', 'Warning: You did not supply an email address.');
+							}
+						}
+						else {
+							$email = $db->escape_sql($_POST['useremail']);
+						}
+						
 						$groups = implode(',', $_POST['membergroups']);
-						$this->newUser($_POST['newusername'], $groups, $_POST['newpassword']);
+						$this->newUser($_POST['newusername'], $groups, $_POST['newpassword'], $email, '');
 					}
 				}
 			}
@@ -123,7 +133,7 @@ class Users {
 					}
 					else {
 						$groups = implode(',', $_POST['membergroups']);
-						$this->editUser($_POST['editusername'], $groups, $_POST['editpassword']);
+						$this->editUser($_POST['editusername'], $groups, $_POST['editpassword'], $_POST['email'], '');
 					}
 				}
 			}
@@ -139,7 +149,7 @@ class Users {
 			$this->newGroup('admin', $rights);
 			
 			// Make a default admin user
-			$this->newUser('admin', 'admin', 'admin');
+			$this->newUser('admin', 'admin', 'admin', 'admin@localhost', '');
 			
 			// Reload groups array
 			$groups = $db->fetch_rows_array("SELECT * FROM groups", array('name', 'rights'));
@@ -151,10 +161,10 @@ class Users {
 		}
 		
 		// Define users array
-		$users = $db->fetch_rows_array("SELECT * FROM users", array('user', 'password', 'groups'));
+		$users = $db->fetch_rows_array("SELECT * FROM users", array('user', 'password', 'groups', 'email', 'settings'));
 		// "Fix" array
 		foreach ($users as $user) {
-			$this->users[$user['user']] = array('password' => $user['password'], 'groups' => explode(',', $user['groups']));
+			$this->users[$user['user']] = array('password' => $user['password'], 'groups' => explode(',', $user['groups']), 'email' => $user['email']);
 		}
 		
 		if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
@@ -280,13 +290,15 @@ class Users {
 	}
 	
 	// Create user
-	function newUser($name, $groups, $password) {
+	function newUser($name, $groups, $password, $email, $settings) {
 		global $db;
 		$rows = array(
 			'table' => 'users',
 			$name,
 			$password,
-			$groups
+			$groups,
+			$email,
+			$settings
 		);
 		$db->save_rows($rows, 'create');
 	}
@@ -302,14 +314,16 @@ class Users {
 	}
 	
 	// Edit user
-	function editUser($user, $groups, $password) {
+	function editUser($user, $groups, $password, $email, $settings) {
 		global $db;
 		$rows = array(
 			'table' => 'users',
 			'sqlWhere' => array('user', $user),
 			'user' => $user,
 			'password' => $password,
-			'groups' => $groups
+			'groups' => $groups,
+			'email' => $email,
+			'settings' => $settings
 		);
 		$db->save_rows($rows, 'update');
 	}

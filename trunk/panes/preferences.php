@@ -174,7 +174,17 @@ switch ($showPref) {
 		echo '<input type="hidden" name="pref_action" value="timezone:ttype" />';
 		break;
 	case 'users':
-		echo '<h2>' . Users_and_Groups . ' ' . Preferences . '</h2>';
+		echo '<h2>' . Users_and_Groups . ' ' . Preferences;
+		if (!isset($_GET['uorg']) || $_GET['uorg'] == 'groups') {
+			echo '	[ <a href="' . pend_requests(array('uorg' => 'users')) . '">Users</a> ]';
+		}
+		else {
+			echo '	[ <a href="' . pend_requests(array('uorg' => 'groups')) . '">Groups</a> ]';
+		}
+		echo '</h2>';
+		
+		// Default or selected pane
+		if (!isset($_GET['uorg']) || $_GET['uorg'] == 'groups') {
 		
 		// Groups manager
 		echo '<fieldset><legend>Groups Manager</legend>
@@ -231,6 +241,10 @@ switch ($showPref) {
 			echo '<input type="hidden" name="group" value="' . $_GET['editgroup'] . '" />';
 		}
 		
+		// End groups and potentially display users
+		}
+		if (isset($_GET['uorg']) && $_GET['uorg'] == 'users') {
+		
 		// Users Manager
 		echo '<fieldset><legend>User Manager</legend>';
 		if (defined('ERROR_MSG')) {
@@ -277,7 +291,16 @@ switch ($showPref) {
 		if (isset($_GET['edituser'])) {
 			echo ' value="' . $users->users[$_GET['edituser']]['password'] . '"';
 		}
-		echo ' /></p>
+		echo ' /></p>';
+		
+		// Email for user
+		echo '<p>Email: <input type="text" name="useremail" size="25"';
+		if (isset($_GET['edituser'])) {
+			echo ' value="' . $users->users[$_GET['edituser']]['email'] . '"';
+		}
+		echo ' /></p>';
+		
+		echo '
 		<p><span style="float: left;">Member of the selected group(s): </span><select name="membergroups[]" multiple="true">';
 		foreach ($users->groups as $name => $group) {
 			echo '<option value="' . $name . '"';
@@ -290,6 +313,11 @@ switch ($showPref) {
 		</p>
 		</div>
 		</fieldset>
+		';
+		
+		} // End users pane
+		
+		echo '
 		<input type="hidden" name="edit_stuff" value="true" />';
 		break;
 	case 'categories':
