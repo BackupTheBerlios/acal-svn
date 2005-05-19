@@ -507,7 +507,7 @@ if ($sidebar) {
    		</select>
    		</span>';
    	echo '<div class="ex" id="recipientpane">
-   	<label for="recipient">Recipient: <img src="images/help-trans.png" alt="?"></label>
+   	<label for="recipient">Recipient: <img src="images/help-trans.png" alt="?" class="help" onclick="javascript:helpMsg(\'Recipient can be a group, user, or an email address or list of email addresses seperated by a comma.\');"></label>
    		<span><input type="text" name="recipient" id="recipient" size="17"></span>
    	</div>
    	';

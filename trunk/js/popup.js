@@ -1,3 +1,7 @@
+function helpMsg(MSG) {
+	alert(MSG);
+}
+
 function openLayer(WinID) {
 	if (document.getElementById(WinID).className == "closed") {
 		document.getElementById(WinID).className = "open";

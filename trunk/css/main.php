@@ -23,6 +23,10 @@ header('Content-Type: text/css; charset=utf-8');
 
 // Stylesheet Starts Here!
 echo '
+img.help:hover {
+	cursor: help;
+}
+
 a {
 	color: blue;
 	text-decoration: underline;
