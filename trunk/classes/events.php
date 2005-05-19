@@ -22,6 +22,11 @@
 class Events {
 	private $what = 'nothing'; // What should do with POST data
 	public $message = ''; // Error and success messages are stored here
+	private $recipients = array(
+		'emails' => array(),
+		'users' => array(),
+		'groups' => array()
+	); // Where event notification recipients are stored
 	
 	function __construct() {
 		// First check if we should do anything at all
@@ -57,6 +62,7 @@ class Events {
 		global $db;
 		global $time;
 		global $pref;
+		global $users;
 		
 		// Create alarm if needed
 		if ($_POST['alarm'] != 'none') {
@@ -69,8 +75,30 @@ class Events {
 			// Create timestamp for when the alarm will be activated
 			$timestamp = $time->make(0, $_POST['minute'], $_POST['hour'], $_POST['day'], $_POST['month'], $_POST['year']);
 			
+			// Convert the recipient into something acal_alarm can take
+			foreach ($this->recipients['groups'] as $group) { // Do groups
+				// Find each users email in that group
+				foreach ($users->users as $user) {
+					if (in_array($group, $user['groups'])) {
+						// Get users email
+						$this->recipients['emails'][] = $user['email'];
+					}
+				}
+			}
+			foreach ($this->recipients['users'] as $user) { // Do users
+				$this->recipients['emails'][] = $users->users[$user]['email'];
+			}
+			// Remove blanks
+			foreach ($this->recipients['emails'] as $key => $email) {
+				if ($email == '') {
+					unset($this->recipients['emails'][$key]);
+				}
+			}
+			// Implode so it's ready for acal_alarm
+			$recipients = implode(', ', $this->recipients['emails']);
+			
 			// Insert Alarm into DB
-			$sql = "INSERT INTO alarms VALUES('$alarmID', '$msg', '$type', '$timestamp', '')";
+			$sql = "INSERT INTO alarms VALUES('$alarmID', '$msg', '$type', '$timestamp', '$recipients')";
 			$db->run($sql);
 			
 			// Execute alarm
@@ -257,6 +285,8 @@ class Events {
 	// Check if required fields were filled in. This code must be flexible
 	function check($other = 'null') {
 		global $pref;
+		global $users;
+		
 		// Check system
 		$vars = array(
 			'summary',
@@ -296,6 +326,31 @@ class Events {
 		if ($_POST['times'] != 'none' && !is_numeric($_POST['times'])) {
 			$this->message = "The amount of times this event repeats must be a number.";
 			return false;
+		}
+		
+		// Check recipient
+		if (isset($_POST['recipient'])) {
+			$stuff = explode(',', $_POST['recipient']);
+			foreach ($stuff as $cip) {
+				// Maybe it's a group?
+				if (isset($users->groups[$cip])) {
+					$this->recipients['groups'][] = $cip;
+				}
+				// Or user?
+				elseif (isset($users->users[$cip])) {
+					$this->recipients['users'][] = $cip;
+				}
+				else {
+					// Must be an email so validate it
+					if (!preg_match("|^[a-zA-Z0-9&'\.\-_\+]+\@[a-zA-Z0-9.-]+\.+[a-zA-Z]{2,6}$|", $cip) || !getmxrr(preg_replace("|(.*?)(@)(.*)|", "$3", $cip), $mxs)) {
+						$this->message = "$cip is not a group, username, or valid email address.";
+						return false;
+					}
+					else {
+						$this->recipients['emails'][] = $cip;
+					}
+				}
+			}
 		}
 		
 		// If false has not yet been returned, return true

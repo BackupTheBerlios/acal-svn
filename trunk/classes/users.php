@@ -133,7 +133,7 @@ class Users {
 					}
 					else {
 						$groups = implode(',', $_POST['membergroups']);
-						$this->editUser($_POST['editusername'], $groups, $_POST['editpassword'], $_POST['email'], '');
+						$this->editUser($_POST['editusername'], $groups, $_POST['editpassword'], $_POST['useremail'], '');
 					}
 				}
 			}

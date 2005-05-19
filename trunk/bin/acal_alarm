@@ -109,12 +109,14 @@ class alarm {
 		// Do switch board thing
 		switch (Method) {
 			case 'email':
-				// Remove SQL record
+				// Fetch and remove SQL record
+				$info = $this->db->fetch_rows_array("SELECT * FROM alarms WHERE id = '" . DBName . "'", array('msg', 'recipient'));
+				$info = $info[0];
 				$sql = "DELETE FROM alarms WHERE id = '" . DBName . "'";
 				$this->db->run($sql);
 				
 				// Send email
-				
+				mail($info['recipient'], 'Event Notification!', $info['msg']);
 				
 				exit("Email Sent!\n");
 				break;
