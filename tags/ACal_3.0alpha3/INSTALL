@@ -1,0 +1,56 @@
+ACal - Web Calendar
+
+
+## Installing From Command Line ##
+
+ 1) Run the configure script: ./configure
+	It will check to make sure everything is working and ask you a few questions.
+ 2) Copy the calendar folder to your document root.
+ 3) Go to it in your web browser. Example: http://localhost/calendar/
+ 4) Click on the login link and login using the username: admin and password: admin.
+ 5) Change your password (Highly Recommended)
+
+
+## Installing on a Remote FTP Server ##
+
+ 1) If you have command line access run the configure script.
+	If you do not, open configuration.xml in a plain text editor.
+	Change whatever you need to. See the Configuration section below.
+ 2) Upload the calendar folder to your web server using your FTP client.
+ 3) Go to it in your web browser. Example: http://my.host.tld/calendar/
+ 4) Click on the login link and login using the username: admin and password: admin.
+ 5) Change your password (Highly Recommended)
+
+## Configuration.xml ##
+
+<db/> What database the calendar should use. Currently sqlite and mysqli are supported.
+
+<prefix/> Something to prefix your database with so it won't interfere with other installations.
+
+<sqlite_path/> If you are using SQLite which is default, this tells ACal where to store
+	the database files. The default value of UNDER_DOCUMENT_ROOT should work fine if
+	you compiled and installed Apache2 from source using the default settings.
+
+<mysqli_host/> The domain or IP address of the server hosting MySQL. Usually 127.0.0.1 or localhost is fine.
+
+<mysqli_username/> Username needed for accessing the MySQL server.
+
+<mysqli_password/> Password needed for accessing the MySQL server.
+
+## Upgrading from ACal 3.0 Alpha 1 ##
+
+It is highly recommended that you completely remove the acal3 SQLite or MySQL database before upgrading to later releases.
+The reason for this is the tables have been modified and are not compatible. You will likely get errors if you don't.
+
+It should also be noted that Firefox (Gecko) and Safari (WebCore) are the only browsers that can currently render the
+web pages correctly. We will work on this for the beta. If you would like to help contact Arthur. (See below)
+
+## Notes ##
+
+PHP 5.0.0 or later is required.
+If you want to use MySQL, you must be using MySQL 4.1 or later with mysqli enabled in PHP via the --with-mysqli configure flag.
+SQLite is enabled by default on all PHP 5 installations, but requires that you set the path to a folder writable
+by your web server. For example the user nobody or in some cases www must have write access to the folder defined in sqlite_path.
+
+Arthur Wiebe <artooro@gmail.com>
+http://acalproj.sourceforge.net
