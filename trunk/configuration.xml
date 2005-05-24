@@ -19,10 +19,10 @@
 -->
 <config>
 	<db>sqlite</db> <!-- Look inside the db directory for available options. -->
-	<prefix>1.90</prefix> <!-- Prefix database so it won't interfere with other installations. -->
+	<prefix>3.0a3</prefix> <!-- Prefix database so it won't interfere with other installations. -->
 	
 	<!-- SQLite Options -->
-	<sqlite_path>/tmp/</sqlite_path> <!-- Path to writable directory for storing database. Default value of UNDER_DOCUMENT_ROOT keyword should work for default Apache/PHP installations. -->
+	<sqlite_path>UNDER_DOCUMENT_ROOT</sqlite_path> <!-- Path to writable directory for storing database. Default value of UNDER_DOCUMENT_ROOT keyword should work for default Apache/PHP installations. -->
 	<!-- Example: /home/arthur/sqlite_data/  !! Must have a trailing slash !! -->
 
 	<!-- MySQLi Options (For MySQL 4.1 and later with mysqli extension) -->
