@@ -540,6 +540,7 @@
 				8E400CAD0785B93500C202F9,
 				8E9B201B078478E700F58FB2,
 				8E9B20130784780D00F58FB2,
+				8EEE4BD6084BA7DF00FAA798,
 			);
 			isa = PBXGroup;
 			path = classes;
@@ -828,6 +829,14 @@
 			isa = PBXFileReference;
 			lastKnownFileType = text.script.sh;
 			path = acal_alarm.bat;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		8EEE4BD6084BA7DF00FAA798 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text.script.php;
+			path = ical.php;
 			refType = 4;
 			sourceTree = "<group>";
 		};
