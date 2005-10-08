@@ -41,11 +41,11 @@ require_once('classes/preferences.php');
 
 define('MY_PHP_VERSION', substr(str_replace('.', '', PHP_VERSION), 0, 3));
 
-if (MY_PHP_VERSION <= 500) {
-	require_once('classes/time.php');
-}
 if (MY_PHP_VERSION >= 510) {
 	require_once('classes/native-time.php');
+}
+elseif (MY_PHP_VERSION < 510) {
+	require_once('classes/time.php');
 }
 
 require_once('classes/users.php');
