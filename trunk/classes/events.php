@@ -329,7 +329,7 @@ class Events {
 		}
 		
 		// Check recipient
-		if (isset($_POST['recipient'])) {
+		if ($_POST['alarm'] == 'email') {
 			$stuff = explode(',', $_POST['recipient']);
 			foreach ($stuff as $cip) {
 				// Maybe it's a group?
