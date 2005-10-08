@@ -98,8 +98,15 @@ class Events {
 			$recipients = implode(', ', $this->recipients['emails']);
 			
 			// Insert Alarm into DB
-			$sql = "INSERT INTO alarms VALUES('$alarmID', '$msg', '$type', '$timestamp', '$recipients')";
-			$db->run($sql);
+			$rows = array(
+						  'table' => 'alarms',
+						  $alarmID,
+						  $msg,
+						  $type,
+						  $timestamp,
+						  $recipients
+						  );
+			$db->save_rows($rows);
 			
 			// Execute alarm
 			if (substr(PHP_OS, 0, 3) == 'WIN') {

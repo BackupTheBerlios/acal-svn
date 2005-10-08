@@ -49,11 +49,6 @@ class StartDB {
 		$this->layer->mktable($this->tables);
 	}
 	
-	// Execute some SQL
-	function run($sql) {
-		return $this->layer->sql($sql);
-	}
-	
 	// Check if row exists
 	function row_exists($table, $column, $row) {
 		return $this->layer->row_exists($table, $column, $row);
