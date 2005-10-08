@@ -30,12 +30,24 @@ $cfg = simplexml_load_file('configuration.xml');
 include('classes/check.php');
 $check = new checkReq();
 
+// Set the default time zone
+ini_set('date.timezone', 'GMT');
+
 // Include needed files
 require_once('classes/locale.php');
 require_once('classes/template.php');
 require_once('classes/db.php');
 require_once('classes/preferences.php');
-require_once('classes/time.php');
+
+define('MY_PHP_VERSION', substr(str_replace('.', '', PHP_VERSION), 0, 3));
+
+if (MY_PHP_VERSION <= 500) {
+	require_once('classes/time.php');
+}
+if (MY_PHP_VERSION >= 510) {
+	require_once('classes/native-time.php');
+}
+
 require_once('classes/users.php');
 require_once('functions/all.php');
 

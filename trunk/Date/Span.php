@@ -73,22 +73,22 @@ class Date_Span {
     /**
      * @var int
      */
-    var $day;
+    public $day;
 
     /**
      * @var int
      */
-    var $hour;
+    public $hour;
 
     /**
      * @var int
      */
-    var $minute;
+    public $minute;
 
     /**
      * @var int
      */
-    var $second;
+    public $second;
 
     /**
      * Constructor.
@@ -128,9 +128,9 @@ class Date_Span {
      */
     function set($time = 0, $format = null)
     {
-        if (is_a($time, 'date_span')) {
+        if ($time instanceof date_span) {
             return $this->copy($time);
-        } elseif (is_a($time, 'date') and is_a($format, 'date')) {
+        } elseif ($time instanceof date && $format instanceof date) {
             return $this->setFromDateDiff($time, $format);
         } elseif (is_array($time)) {
             return $this->setFromArray($time);

@@ -102,6 +102,11 @@ class Prefs {
 		return $this->prefs[$name];
 	}
 	
+	// Overloading version of getvalue()
+	function __get($name) {
+		return $this->prefs[$name];
+	}
+	
 	// Update preference value
 	function update($name, $value) {
 		global $db;

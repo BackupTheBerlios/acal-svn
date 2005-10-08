@@ -71,44 +71,44 @@ class Date
 {
     /**
      * the year
-     * @var int
+     * @public int
      */
-    var $year;
+    public $year;
     /**
      * the month
-     * @var int
+     * @public int
      */
-    var $month;
+    public $month;
     /**
      * the day
-     * @var int
+     * @public int
      */
-    var $day;
+    public $day;
     /**
      * the hour
-     * @var int
+     * @public int
      */
-    var $hour;
+    public $hour;
     /**
      * the minute
-     * @var int
+     * @public int
      */
-    var $minute;
+    public $minute;
     /**
      * the second
-     * @var int
+     * @public int
      */
-    var $second;
+    public $second;
     /**
      * the parts of a second
-     * @var float
+     * @public float
      */
-    var $partsecond;
+    public $partsecond;
     /**
      * timezone for this date
-     * @var object Date_TimeZone
+     * @public object Date_TimeZone
      */
-    var $tz;
+    public $tz;
 
 
     /**
@@ -616,9 +616,12 @@ class Date
      */
     function addSpan($span)
     {
-        if (!is_a($span, 'Date_Span')) {
-            return;
+        if ($span instanceof Date_Span) {
+            
         }
+		else {
+			return;
+		}
 
         $this->second += $span->second;
         if ($this->second >= 60) {
@@ -677,9 +680,13 @@ class Date
      */
     function subtractSpan($span)
     {
-        if (!is_a($span, 'Date_Span')) {
-            return;
+        if (!$span instanceof Date_Span) {
+            
         }
+		else {
+			return;
+		}
+		
         if ($span->isEmpty()) {
             return;
         }

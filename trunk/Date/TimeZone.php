@@ -51,43 +51,43 @@ class Date_TimeZone
      * Time Zone ID of this time zone
      * @var string
      */
-    var $id;
+    public $id;
     /**
      * Long Name of this time zone (ie Central Standard Time)
      * @var string
      */
-    var $longname;
+    public $longname;
     /**
      * Short Name of this time zone (ie CST)
      * @var string
      */
-    var $shortname;
+    public $shortname;
     /**
      * true if this time zone observes daylight savings time
      * @var boolean
      */
-    var $hasdst;
+    public $hasdst;
     /**
      * DST Long Name of this time zone
      * @var string
      */
-    var $dstlongname;
+    public $dstlongname;
     /**
      * DST Short Name of this timezone
      * @var string
      */
-    var $dstshortname;
+    public $dstshortname;
     /**
      * offset, in milliseconds, of this timezone
      * @var int
      */
-    var $offset;
+    public $offset;
 
     /**
      * System Default Time Zone
      * @var object Date_TimeZone
      */
-    var $default;
+    public $default;
 
 
     /**
