@@ -24,7 +24,7 @@ class DBLayer {
 	private $link = '';
 
 	// Connect to database
-	function connect($name) {
+	function connect($name, $path = false) {
 		$this->name = $name;
 		global $cfg;
 		

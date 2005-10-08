@@ -41,7 +41,7 @@ require_once('Console/Getopt.php');
 $cg = new Console_Getopt();
 
 // Define allowed options
-$shortoptions = 'm:t:n:';
+$shortoptions = 'm:t:n:p:';
 
 // read the command line
 $args = $cg->readPHPArgv();
@@ -74,6 +74,9 @@ if (count($opts) > 0) {
 			case 'n':
 				define('DBName', $opt[1]);
 				break;
+			case 'p':
+				define('DB_PATH', $opt[1]);
+				break;
 		}
 	}
 }
@@ -83,7 +86,7 @@ else {
 }
 
 class alarm {
-	private $db;
+	public $db;
 
 	function __construct() {
 		// Make sure each needed option is defined
@@ -105,7 +108,12 @@ class alarm {
 		$this->db = new StartDB($cfg->db, $tables);
 		
 		// Open db connection
-		$this->db->open('acal3');
+		if (defined('DB_PATH')) {
+			$this->db->open('acal3', DB_PATH);
+		}
+		else {
+			$this->db->open('acal3');
+		}
 		
 	}
 	
@@ -118,7 +126,7 @@ class alarm {
 				$info = $info[0];
 				$rows = array(
 					'table' => 'alarms',
-					'sqlWhere' = array('id', DBName),
+					'sqlWhere' => array('id', DBName),
 				);
 				$this->db->save_rows($rows, 'delete');
 				

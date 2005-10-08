@@ -115,7 +115,12 @@ class Events {
 			}
 			else {
 				// On *nixes
-				exec("./bin/acal_alarm -n $alarmID -m $type -t $timestamp >/dev/null &");
+				if (defined('DATABASE_PATH')) {
+					exec("./bin/acal_alarm -n $alarmID -m $type -t $timestamp -p " . DATABASE_PATH . " >/dev/null &");
+				}
+				else {
+					exec("./bin/acal_alarm -n $alarmID -m $type -t $timestamp >/dev/null &");
+				}
 			}
 		}
 		

@@ -37,13 +37,13 @@ class StartDB {
 	}
 	
 	// Open database connection
-	function open($name) {
+	function open($name, $path = false) {
 		global $cfg;
 		if ($cfg->prefix != '') {
 			$name = $cfg->prefix . $name;
 		}
 		
-		$this->dbHandle = $this->layer->connect($name);
+		$this->dbHandle = $this->layer->connect($name, $path);
 		
 		// Make sure all the tables exist
 		$this->layer->mktable($this->tables);

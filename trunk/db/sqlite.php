@@ -23,16 +23,20 @@ class DBLayer {
 	private $link;
 	
 	// Connect to database
-	function connect($name) {
+	function connect($name, $customPath = false) {
 		global $cfg; // Make configuration global
 		
 		// Figure out the path to data
-		if ($cfg->sqlite_path == 'UNDER_DOCUMENT_ROOT') {
+		if ($customPath) {
+			$path = $customPath;
+		}
+		elseif ($cfg->sqlite_path == 'UNDER_DOCUMENT_ROOT') {
 			$path = $_SERVER['DOCUMENT_ROOT'] . '/../' . $name . '.sqlite';
 		}
 		else {
 			$path = $cfg->sqlite_path . $name . '.sqlite';
 		}
+		define('DATABASE_PATH', $path);
 		
 		$sqliteerror = NULL;
 		if ($db = new SQLiteDatabase($path, 0666, $sqliteerror)) {
