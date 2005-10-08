@@ -37,20 +37,20 @@ function read() {
 if (!version_compare(phpversion(), "5.0.0", ">=")) {
 	exit("Error: ACal 3.0 Requires PHP 5.0.0 or later. You are using " . phpversion() . ". Please upgrade and try again.\n");
 }
-echo "Checking PHP Version. [" . phpversion() . "] Good\n";
+echo "Found PHP version [" . phpversion() . "].\n";
 
 // Make sure SimpleXML is available.
 if (!function_exists('simplexml_load_file')) {
 	exit("Error: PHP was not compiled with SimpleXML support. Remove the --disable-simplexml option and build PHP again.\n");
 }
-echo "Checking for SimpleXML: Yes\n";
+echo "Found SimpleXML extension.\n";
 
 // Check if we have read/write access to configuration.xml
 if (!is_writable('configuration.xml')) {
 	echo "configuration.xml is not writable by this script. You will have to edit it by hand.";
 }
 else {
-	echo "Checking if configuration.xml is writable. Yes\n";
+	echo "configuration.xml is writable.\n\n";
 	
 	// Ask for preferred database
 	echo " What database would you like to use? sqlite or mysqli\n";
