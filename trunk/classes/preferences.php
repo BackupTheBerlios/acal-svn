@@ -92,7 +92,12 @@ class Prefs {
 		// loop through them and if not in database add them
 		foreach ($prefs as $pref) {
 			if (!$db->row_exists('prefs', 'name', $pref[0])) {
-				$db->run("INSERT INTO prefs VALUES ('$pref[0]', '$pref[1]')");
+				$rows = array(
+							  'table' => 'prefs',
+							  $pref[0],
+							  $pref[1]
+							  );
+				$db->save_rows($rows);
 			}
 		}
 	}
@@ -110,8 +115,12 @@ class Prefs {
 	// Update preference value
 	function update($name, $value) {
 		global $db;
-		$sql = "UPDATE prefs SET value = '$value' WHERE name = '$name'";
-		$db->run($sql);
+		$rows = array(
+					  'table' => 'prefs',
+					  'sqlWhere' => array('name', $name),
+					  'value' => $value
+					  );
+		$db->save_rows($rows, 'update');
 	}
 }
 ?>

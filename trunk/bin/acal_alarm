@@ -19,6 +19,10 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+// Turn error reporting to E_ALL
+ini_set('error_reporting', E_ALL);
+
+
 // Define help
 $help = 'Usage: acal_alarm -m <method> -t <timestamp> -n <name>
 	<method> Type of alarm. Can be email or html.
@@ -112,8 +116,11 @@ class alarm {
 				// Fetch and remove SQL record
 				$info = $this->db->fetch_rows_array("SELECT * FROM alarms WHERE id = '" . DBName . "'", array('msg', 'recipient'));
 				$info = $info[0];
-				$sql = "DELETE FROM alarms WHERE id = '" . DBName . "'";
-				$this->db->run($sql);
+				$rows = array(
+					'table' => 'alarms',
+					'sqlWhere' = array('id', DBName),
+				);
+				$this->db->save_rows($rows, 'delete');
 				
 				// Send email
 				mail($info['recipient'], 'Event Notification!', $info['msg']);
@@ -122,13 +129,13 @@ class alarm {
 				break;
 			case 'html':
 				// Update row with active status which will last 15 minutes
-				$sql = "UPDATE alarms SET status = 'active' WHERE id = '" . DBName . "'";
-				if ($this->db->run($sql)) {
-				    echo "Status Updated at " . gmdate('c', time()) . "\n";
-				}
-				else {
-				    echo "Error: Status could not be updated\n";
-				}
+				$rows = array(
+					'table' => 'alarms',
+					'sqlWhere' => array('id', DBName),
+					'status' => 'active'
+				);
+				$this->db->save_rows($rows, 'update');
+				
 				// Keep running for 15 minutes before removing record
 				$timestamp = Timestamp + (60*15);
 				define('Timeout', $timestamp);
@@ -138,8 +145,11 @@ class alarm {
 	
 	function timeout() {
 		// Remove SQL record
-		$sql = "DELETE FROM alarms WHERE id = '" . DBName . "'";
-		$this->db->run($sql);
+		$rows = array(
+			'table' => 'alarms',
+			'sqlWhere' => array('id', DBName)
+		);
+		$this->db->save_rows($rows, 'delete');
 		exit("Timed out at: " . gmdate('c', time()) . "\n");
 	}
 }
