@@ -118,7 +118,7 @@ switch ($GLOBALS['database']) {
 		$GLOBALS['mysqli_pass'] = read();
 		
 		echo "Checking database connection... ";
-		$db = new mysqli($GLOBALS['mysqli_host'], $GLOBALS['user'], $GLOBALS['pass']);
+		$db = new mysqli($GLOBALS['mysqli_host'], $GLOBALS['mysqli_user'], $GLOBALS['mysqli_pass']);
 		if (mysqli_connect_errno()) {
 			exit("Error: Could not connect to MySQL.\n");
 		}
