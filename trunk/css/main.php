@@ -226,13 +226,9 @@ div.event span:hover>span.menu {
 #sidebar label {
 	font-size: 13px;
 	display: block;
-	float: left;
+	float: none;
 	margin-bottom: 6px;
 	margin-top: 3px;
-}
-
-#sidebar input:focus {
-	background-color: #c0d9fa;
 }
 
 #sidebar input {
@@ -257,9 +253,8 @@ div.event span:hover>span.menu {
 }
 
 .form_box {
-	font-size: 13px;
-	clear: both;
-	margin-left: 14px;
+	font-size: 11px;
+	margin-left: 10px;
 }
 
 .side_panel {
@@ -331,7 +326,7 @@ td.weekday {
 
 .theader {
 	text-align: center;
-	font-size: 36px;
+	font-size: 32px;
 	font-style: oblique;
 }
 
